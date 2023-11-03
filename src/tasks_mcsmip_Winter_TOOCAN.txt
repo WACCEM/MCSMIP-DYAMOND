@@ -1,0 +1,12 @@
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_ARPEGE.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_GEOS.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_GRIST.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_ICON.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_IFS.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_MPAS.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_NICAM.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_OBS.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_SAM.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_SCREAM.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_UM.yml TOOCAN 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_XSHiELD.yml TOOCAN 2020-02-01T00 2020-03-01T00

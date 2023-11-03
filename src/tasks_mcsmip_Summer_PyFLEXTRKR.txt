@@ -1,0 +1,8 @@
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_ARPEGE.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_FV3.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_IFS.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_MPAS.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_NICAM.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_OBS.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_SAM.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/calc_tbpf_mcs_rainmap_mcsmip.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_UM.yml PyFLEXTRKR 2016-08-10T00 2016-09-10T00

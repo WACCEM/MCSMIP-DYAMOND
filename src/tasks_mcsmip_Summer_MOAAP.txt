@@ -1,0 +1,8 @@
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer ARPEGE MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer FV3 MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer IFS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer MPAS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer NICAM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer OBS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer SAM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer UM MOAAP

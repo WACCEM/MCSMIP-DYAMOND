@@ -1,0 +1,12 @@
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter ARPEGE MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter GEOS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter GRIST MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter ICON MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter IFS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter MPAS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter NICAM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter OBS MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter SAM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter SCREAM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter UM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter XSHiELD MOAAP
