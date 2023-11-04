@@ -58,6 +58,14 @@ if __name__ == "__main__":
     print(f'Reading MCS mask file: {mask_file}')
     ds = xr.open_dataset(mask_file, mask_and_scale=False)
 
+    # Check duplicate times in the mask DataSet
+    duplicates = ds.indexes['time'].duplicated()
+    if duplicates.any() == True:
+        # Group by time and take the first value for each group (remove duplicates)
+        ds_unique_times = ds.groupby('time').first()
+        # Resetting the index to get a new time coordinate
+        ds = ds_unique_times.reset_index('time').set_xindex('time')
+
     # Change time coordinate encoding
     ds['time'].encoding['units'] = f'hours since {start_datetime}'
 

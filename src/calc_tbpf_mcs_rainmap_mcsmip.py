@@ -78,6 +78,15 @@ if __name__ == "__main__":
         print(f'Reading MCS mask file: {mask_file}')
         dsm = xr.open_dataset(mask_file, mask_and_scale=False)
 
+        # # Check duplicate times in the mask DataSet
+        # duplicates = dsm.indexes['time'].duplicated()
+        # if duplicates.any() == True:
+        #     # Group by time and take the first value for each group (remove duplicates)
+        #     dsm_unique_times = dsm.groupby('time').first()
+        #     # Resetting the index to get a new time coordinate
+        #     dsm = dsm_unique_times.reset_index('time').set_xindex('time')
+        # import pdb; pdb.set_trace()
+
         # Subset mask file for the times
         dsm = dsm.sel(time=ds['time'], method='nearest')
         # dsm = dsm.reset_index('time', drop=True)

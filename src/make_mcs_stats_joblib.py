@@ -38,8 +38,7 @@ if __name__ == "__main__":
     elif 'calc_tbpf_mcs_rainmap_mcsmip' in code_name:
         wallclock_time = '00:10:00'
     elif 'make_mcs_stats_from_maskfile' in code_name:
-        wallclock_time = '03:00:00'
-        # wallclock_time = '00:20:00'
+        wallclock_time = '00:20:00'
 
     # DYAMOND phase start date
     if PHASE == 'Summer':
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     text = f"""\
         #!/bin/bash
         #SBATCH -A m1867
-        #SBATCH -J {PHASE}_{tracker}
+        #SBATCH -J {PHASE}{tracker}
         #SBATCH -t {wallclock_time}
         #SBATCH -q regular
         #SBATCH -C cpu

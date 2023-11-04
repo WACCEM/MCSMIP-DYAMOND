@@ -645,7 +645,8 @@ if __name__ == "__main__":
     ds = xr.open_dataset(mask_file, mask_and_scale=False)
     ntimes = ds.sizes['time']
     time_mcs_mask = ds['time']
-    mcs_mask = ds[mask_varname].load()
+    mcs_mask = ds[mask_varname]
+    # mcs_mask = ds[mask_varname].load()
 
     # Get max track number, this is the total number of tracks
     ntracks = mcs_mask.max().astype(int).item()
@@ -655,12 +656,13 @@ if __name__ == "__main__":
     # Find all unique track numbers at each time and save to a list
     # This should take ~1 min to run for 960 times
     print(f'Finding MCS track numbers at each time ...')
-    mcs_mask_np = mcs_mask.data
+    # mcs_mask_np = mcs_mask.data
     list_mcs = []
     list_mcs_times = []
     for itime in range(0, ntimes):
         # Get unique MCS number at thie time
-        mcs_num = np.unique(mcs_mask_np[itime])
+        # mcs_num = np.unique(mcs_mask_np[itime])
+        mcs_num = np.unique(mcs_mask.isel(time=itime))
         # Find MCS number > 0 in the list (exclude 0 & NaN)
         # mcs_num_x0 = list(filter(lambda x: x != 0, mcs_num))
         mcs_num_x0 = list(filter(lambda x: x > 0, mcs_num))
@@ -668,6 +670,7 @@ if __name__ == "__main__":
         if len(mcs_num_x0) > 0:
             list_mcs.append(mcs_num_x0)
             list_mcs_times.append(time_mcs_mask.isel(time=itime).data)
+        print(f'Time {itime}, number of MCS: {len(mcs_num_x0)}')
     
     # Convert list to array
     list_mcs_times = np.array(list_mcs_times)
@@ -690,18 +693,29 @@ if __name__ == "__main__":
     coord_times = np.arange(0, ntimes_out)
     coord_pfs = np.arange(0, nmaxpf)
 
+    # Convert list of varying lengths to numpy array for faster operation
+    list_mcs_np = np.fromiter((np.array(sublist) for sublist in list_mcs), dtype=object)
+    # Find unique track numbers
+    unique_mcs_tracknum = set(number for sublist in list_mcs for number in sublist)
+    unique_mcs_tracknum = sorted(list(unique_mcs_tracknum))
+    # import pdb; pdb.set_trace()
+
+    print(f'Making base_times for each track ...')
     # Loop over each track
-    for tracknum in range(1, ntracks+1):
+    # for tracknum in range(1, ntracks+1):
+    for tracknum in unique_mcs_tracknum:
         ii = tracknum - 1  # track index
         # Find time indices for the track
-        tidx_tracknum = find_track_time_indices(list_mcs, tracknum)
+        # tidx_tracknum = find_track_time_indices(list_mcs, tracknum)
+        tidx_tracknum = np.where(np.array([tracknum in sublist for sublist in list_mcs_np]))[0]
         # import pdb; pdb.set_trace()
-        if tidx_tracknum:
+        # if tidx_tracknum:
+        if len(tidx_tracknum) > 0:
+            print(f'Track {ii}, duration: {len(tidx_tracknum)}')
             # base_times[ii, :len(tidx_tracknum)] = time_mcs_mask.isel(time=tidx_tracknum).data
             base_times[ii, :len(tidx_tracknum)] = list_mcs_times[tidx_tracknum]
 
             # Convert time values to hours since the reference time
-            # itime = time_mcs_mask.isel(time=tidx_tracknum)
             itime = list_mcs_times[tidx_tracknum]
             hours_since_reference = (itime - reference_time) / np.timedelta64(1, 'h')
             mcs_times[ii, :len(tidx_tracknum)] = hours_since_reference.astype(int).data
@@ -729,6 +743,19 @@ if __name__ == "__main__":
         'long_name': 'End time of each track',
         'units': f'Hours since {reference_date} 00:00:00',
     }
+
+    # Remove tracks that do not exist (e.g., TOOCAN)
+    track_idx_exist = np.where(track_duration > 0)[0]
+    # Update dimension & coordinate
+    ntracks = len(track_idx_exist)
+    coord_tracks = coord_tracks[track_idx_exist]
+    # Subset variables
+    track_duration = track_duration[track_idx_exist]
+    start_basetime = start_basetime[track_idx_exist]
+    end_basetime = end_basetime[track_idx_exist]
+    mcs_times = mcs_times[track_idx_exist, :]
+    base_times = base_times[track_idx_exist, :]
+
 
     ################################################################
     # Define a dataset containing time-related variables
@@ -773,6 +800,7 @@ if __name__ == "__main__":
     timeindices_all = []
     results = []
 
+    print(f'Calculating statistics from pixel-files ...')
     # Loop over each pixel file to calculate PF statistics
     for ifile in range(nfiles):
     # for ifile in range(0, 2):
@@ -902,6 +930,8 @@ if __name__ == "__main__":
 
     # Define global attributes
     gattrlist = {
+        "title": f'{PHASE} {runname} MCS statistics file',
+        "tracker": tracker,
         "pixel_radius_km": pixel_radius,
         "time_resolution_hour": time_resolution_hour,
         "tb_core_thresh": cloudtb_core,

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A m1867
 #SBATCH -J Summer_TOOCAN
-#SBATCH -t 03:00:00
+#SBATCH -t 00:20:00
 #SBATCH -q regular
 #SBATCH -C cpu
 #SBATCH --nodes=1
