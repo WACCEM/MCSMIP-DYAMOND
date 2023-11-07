@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A m1867
-#SBATCH -J Winter_MOAAP
-#SBATCH -t 00:10:00
+#SBATCH -J WinterMOAAP
+#SBATCH -t 00:05:00
 #SBATCH -q regular
 #SBATCH -C cpu
 #SBATCH --nodes=1

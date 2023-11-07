@@ -1,8 +1,8 @@
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer ARPEGE MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer FV3 MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer IFS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer MPAS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer NICAM MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer OBS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer SAM MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Summer UM MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_ARPEGE.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_FV3.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_IFS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_MPAS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_NICAM.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_OBS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_SAM.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_UM.yml

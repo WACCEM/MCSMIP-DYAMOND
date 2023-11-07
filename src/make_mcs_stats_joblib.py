@@ -22,16 +22,19 @@ if __name__ == "__main__":
 
     code_dir = '/global/homes/f/feng045/program/mcsmip/dyamond/src/'
     # slurm_dir = code_dir
+    # code_name = f'{code_dir}unify_dyamond_olr_pcp_files.py'
     # code_name = f'{code_dir}unify_mask_files.py'
     # code_name = f'{code_dir}make_mcs_maskfile_singlefile.py'
-    # code_name = f'{code_dir}calc_tbpf_mcs_rainmap_mcsmip.py'
-    code_name = f'{code_dir}make_mcs_stats_from_maskfile.py'
+    code_name = f'{code_dir}calc_tbpf_mcs_rainmap_mcsmip.py'
+    # code_name = f'{code_dir}make_mcs_stats_from_maskfile.py'
     config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
     config_basename = f'config_dyamond_'
     slurm_basename = f'slurm_dyamond_'
 
     # Set wallclock_time based on which code is used
-    if 'unify_mask_files' in code_name:
+    if 'unify_dyamond_olr_pcp_files' in code_name:
+        wallclock_time = '00:05:00'
+    elif 'unify_mask_files' in code_name:
         wallclock_time = '00:10:00'
     elif 'make_mcs_maskfile_singlefile' in code_name:
         wallclock_time = '00:15:00'
@@ -94,7 +97,9 @@ if __name__ == "__main__":
         if os.path.isfile(config_file) != True:
             print(f'ERROR: config file does NOT exist: {config_file}')
             sys.exit(f'Code will exist now.')
-        if 'unify_mask_files' in code_name:
+        if 'unify_dyamond_olr_pcp_files' in code_name:
+            cmd = f'python {code_name} {config_file}'
+        elif 'unify_mask_files' in code_name:
             cmd = f'python {code_name} {PHASE} {run} {tracker}'
         else:
             cmd = f'python {code_name} {config_file} {tracker} {start_date} {end_date}'

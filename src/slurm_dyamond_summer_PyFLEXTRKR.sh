@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -A m1867
-#SBATCH -J Summer_PyFLEXTRKR
+#SBATCH -J SummerPyFLEXTRKR
 #SBATCH -t 00:10:00
 #SBATCH -q regular
 #SBATCH -C cpu

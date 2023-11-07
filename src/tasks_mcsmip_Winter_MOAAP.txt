@@ -1,12 +1,12 @@
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter ARPEGE MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter GEOS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter GRIST MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter ICON MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter IFS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter MPAS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter NICAM MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter OBS MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter SAM MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter SCREAM MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter UM MOAAP
-python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_mask_files.py Winter XSHiELD MOAAP
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_ARPEGE.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_GEOS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_GRIST.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_ICON.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_IFS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_MPAS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_NICAM.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_OBS.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_SAM.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_SCREAM.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_UM.yml
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/unify_dyamond_olr_pcp_files.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_XSHiELD.yml
