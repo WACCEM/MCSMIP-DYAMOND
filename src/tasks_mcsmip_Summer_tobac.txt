@@ -1,0 +1,8 @@
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_ARPEGE.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_FV3.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_IFS.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_MPAS.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_NICAM.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_OBS.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_SAM.yml tobac 2016-08-10T00 2016-09-10T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_summer_UM.yml tobac 2016-08-10T00 2016-09-10T00

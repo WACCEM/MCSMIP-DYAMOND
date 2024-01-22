@@ -644,9 +644,24 @@ if __name__ == "__main__":
     print(f'Reading MCS mask file: {mask_file}')
     ds = xr.open_dataset(mask_file, mask_and_scale=False)
     ntimes = ds.sizes['time']
-    time_mcs_mask = ds['time']
-    mcs_mask = ds[mask_varname]
-    # mcs_mask = ds[mask_varname].load()
+    # time_mcs_mask = ds['time']
+
+    # Check time encoding from the mask file
+    time_encoding = ds['time'].encoding.get('calendar', None)
+    # Convert 'noleap' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
+    if time_encoding == 'noleap':
+        time_DatetimeIndex = xr.cftime_range(start=ds['time'].values[0], periods=ntimes, freq='1H', calendar='noleap').to_datetimeindex()
+        # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
+        time_mcs_mask = xr.DataArray(time_DatetimeIndex, coords={'time': time_DatetimeIndex}, dims='time')
+        ds['time'] = time_mcs_mask
+    else:
+        time_mcs_mask = ds['time']
+
+    # Get MCS mask and convert the type as int if needed
+    if ds[mask_varname].dtype != int:
+        mcs_mask = ds[mask_varname].astype(int)
+    else:
+        mcs_mask = ds[mask_varname]
 
     # Get max track number, this is the total number of tracks
     ntracks = mcs_mask.max().astype(int).item()
@@ -663,6 +678,7 @@ if __name__ == "__main__":
         # Get unique MCS number at thie time
         # mcs_num = np.unique(mcs_mask_np[itime])
         mcs_num = np.unique(mcs_mask.isel(time=itime))
+
         # Find MCS number > 0 in the list (exclude 0 & NaN)
         # mcs_num_x0 = list(filter(lambda x: x != 0, mcs_num))
         mcs_num_x0 = list(filter(lambda x: x > 0, mcs_num))
@@ -719,6 +735,7 @@ if __name__ == "__main__":
             itime = list_mcs_times[tidx_tracknum]
             hours_since_reference = (itime - reference_time) / np.timedelta64(1, 'h')
             mcs_times[ii, :len(tidx_tracknum)] = hours_since_reference.astype(int).data
+    # import pdb; pdb.set_trace()
 
     # Get track duration, start/end time
     mcs_exist = mcs_times > 0

@@ -196,7 +196,7 @@ if __name__ == "__main__":
             'UM',
         ]
     elif (PHASE == 'Winter'):
-        # runnames=['SCREAM', 'XSHiELD']
+        # runnames=['SCREAM']
         runnames = [
             'ARPEGE',
             'GEOS',

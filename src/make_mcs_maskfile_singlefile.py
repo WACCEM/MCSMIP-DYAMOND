@@ -29,6 +29,10 @@ def subset_vars(infiles):
     ds['time'].encoding['units'] = f'hours since {start_datetime}'
     # Update time attributes
     ds['time'].attrs['long_name'] = 'Time'
+    # Round down the time to the nearest hour
+    t_coord_new = ds['time'].dt.floor('H')
+    # Update time coordinate
+    ds = ds.assign_coords({'time':t_coord_new})
 
     # Read lon from reference grid
     dsref = xr.open_dataset(ref_grid)
@@ -112,7 +116,7 @@ if __name__=='__main__':
     os.makedirs(out_dir, exist_ok=True)
 
     # Set flag to run in parallel (1) or serial (0)
-    run_parallel = 1
+    run_parallel = 0
     # Number of workers for Dask
     n_workers = 128
     # Threads per worker

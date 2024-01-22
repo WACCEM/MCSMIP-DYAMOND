@@ -1,0 +1,12 @@
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_ARPEGE.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_GEOS.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_GRIST.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_ICON.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_IFS.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_MPAS.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_NICAM.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_OBS.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_SAM.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_SCREAM.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_UM.yml TAMS 2020-02-01T00 2020-03-01T00
+python /global/homes/f/feng045/program/mcsmip/dyamond/src/make_mcs_stats_from_maskfile.py /global/homes/f/feng045/program/pyflex_config/config/config_dyamond_winter_XSHiELD.yml TAMS 2020-02-01T00 2020-03-01T00

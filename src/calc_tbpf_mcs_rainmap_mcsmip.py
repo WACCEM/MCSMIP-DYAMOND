@@ -56,6 +56,7 @@ if __name__ == "__main__":
     ds = xr.open_dataset(pcp_file)
     # Subset times
     ds = ds.sel(time=slice(start_datetime, end_datetime))
+
     # Convert CFTimeIndex to Pandas DatetimeInex
     # This gets around issues with time coordinates in cftime.DatetimeNoLeap format (e.g., SCREAM)
     if runname == 'SCREAM':
@@ -70,6 +71,12 @@ if __name__ == "__main__":
     # Read MCS mask file
     print(f'Reading MCS mask file: {mask_file}')
     dsm = xr.open_dataset(mask_file, mask_and_scale=False)
+    # Convert CFTimeIndex to Pandas DatetimeInex
+    if dsm['time'].encoding.get('calendar') == 'noleap':
+        dsm_datetimeindex = dsm.indexes['time'].to_datetimeindex()
+        # Replace the original time coordinate
+        dsm = dsm.assign_coords({'time': dsm_datetimeindex})
+
     # Subset mask file for the times
     dsm = dsm.sel(time=ds['time'], method='nearest')
     ntimes_mask = dsm.sizes['time']

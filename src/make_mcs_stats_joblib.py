@@ -4,9 +4,6 @@ Make task list and slurm scripts for MCSMIP statistics.
 __author__ = "Zhe.Feng@pnnl.gov"
 
 import sys, os
-import numpy as np
-import xarray as xr
-import yaml
 import textwrap
 import subprocess
 
@@ -18,22 +15,22 @@ if __name__ == "__main__":
     tracker = sys.argv[2]
 
     # Submit slurm job
-    submit_job = True
+    submit_job = False
 
     code_dir = '/global/homes/f/feng045/program/mcsmip/dyamond/src/'
     # slurm_dir = code_dir
     # code_name = f'{code_dir}unify_dyamond_olr_pcp_files.py'
     # code_name = f'{code_dir}unify_mask_files.py'
     # code_name = f'{code_dir}make_mcs_maskfile_singlefile.py'
-    code_name = f'{code_dir}calc_tbpf_mcs_rainmap_mcsmip.py'
-    # code_name = f'{code_dir}make_mcs_stats_from_maskfile.py'
+    # code_name = f'{code_dir}calc_tbpf_mcs_rainmap_mcsmip.py'
+    code_name = f'{code_dir}make_mcs_stats_from_maskfile.py'
     config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
     config_basename = f'config_dyamond_'
     slurm_basename = f'slurm_dyamond_'
 
     # Set wallclock_time based on which code is used
     if 'unify_dyamond_olr_pcp_files' in code_name:
-        wallclock_time = '00:05:00'
+        wallclock_time = '00:10:00'
     elif 'unify_mask_files' in code_name:
         wallclock_time = '00:10:00'
     elif 'make_mcs_maskfile_singlefile' in code_name:
@@ -117,7 +114,7 @@ if __name__ == "__main__":
     text = f"""\
         #!/bin/bash
         #SBATCH -A m1867
-        #SBATCH -J {PHASE}{tracker}
+        #SBATCH -J {PHASE[0:3]}{tracker}
         #SBATCH -t {wallclock_time}
         #SBATCH -q regular
         #SBATCH -C cpu

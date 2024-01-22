@@ -10,9 +10,9 @@ tracker=$2
 source activate /global/common/software/m1867/python/pyflex
 
 # Python code
-code_dir='/global/homes/f/feng045/program/dyamond/src/'
-code_name=${code_dir}'unify_mask_files.py'
-# code_name=${code_dir}'make_mcs_maskfile_singlefile.py'
+code_dir='/global/homes/f/feng045/program/mcsmip/dyamond/src/'
+# code_name=${code_dir}'unify_mask_files.py'
+code_name=${code_dir}'make_mcs_maskfile_singlefile.py'
 # code_name=${code_dir}'make_mcs_stats_from_maskfile.py'
 
 # Model names

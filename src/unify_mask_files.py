@@ -7,6 +7,7 @@ import numpy as np
 import glob, sys, os
 import time
 import xarray as xr
+import pandas as pd
 
 if __name__ == "__main__":
     
@@ -38,6 +39,23 @@ if __name__ == "__main__":
         mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}.nc'
         xcoord_name = 'longitude'
         ycoord_name = 'latitude'
+    elif tracker == 'tobac':
+        phase = PHASE.lower()
+        mask_file = f'{in_dir}tobac_{runname}_{phase}_MCS_mask_file.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
+    elif tracker == 'TAMS':
+        mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
+    elif tracker == 'simpleTrack':
+        mask_file = f'{in_dir}DYAMOND_{PHASE}_{runname}_MCS_masks.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
+    else:
+        print(f'ERROR: {tracker} file format is undefined.')
+        print(f'Code will exist now.')
+        sys.exit()
     
     # Reference grid
     ref_grid = '/pscratch/sd/f/feng045/DYAMOND/maps/IMERG_landmask_180W-180E_60S-60N.nc'
@@ -57,6 +75,17 @@ if __name__ == "__main__":
     # Read MCS mask file
     print(f'Reading MCS mask file: {mask_file}')
     ds = xr.open_dataset(mask_file, mask_and_scale=False)
+
+    # # The time coordinate in the simpleTrack Winter OBS file is wrong, replace it
+    # if (PHASE == 'Winter') & (runname == 'OBS') & (tracker == 'simpleTrack'):
+    #     hours = pd.date_range(start=start_datetime, periods=len(ds.time), freq='H')
+    #     ds = ds.assign_coords(time=hours)
+
+    # Rename 'xtime' coordinate (e.g., MPAS)
+    if 'xtime' in ds.coords:
+        ds = ds.drop_vars(['time'])
+        ds = ds.rename({'xtime':'time'})
+        # import pdb; pdb.set_trace()
 
     # Check duplicate times in the mask DataSet
     duplicates = ds.indexes['time'].duplicated()
@@ -87,7 +116,47 @@ if __name__ == "__main__":
     ds.update({'latitude': lat2d_ref})
 
     # Drop original coordinates
-    dsout = ds.drop_vars([xcoord_name, ycoord_name])
+    # if (tracker != 'TOOCAN'):
+    #     dsout = ds.drop_vars([xcoord_name, ycoord_name])
+    # else:
+    #     dsout = ds
+    if (tracker == 'TOOCAN') | (tracker == 'tobac') | (tracker == 'TAMS') | (tracker == 'simpleTrack'):
+        dsout = ds
+    else:
+        dsout = ds.drop_vars([xcoord_name, ycoord_name])
+    # import pdb; pdb.set_trace()
+
+    # Drop variables
+    if tracker == 'tobac':
+        coordinates_to_drop = ['feature', 'cell', 'track']
+        variables_to_drop = ['all_feature_labels', 'mcs_feature_labels', 'all_cell_labels', 'mcs_cell_labels']
+    elif tracker == 'TAMS':
+        coordinates_to_drop = ['mcs_id']
+        variables_to_drop = []
+    else:
+        coordinates_to_drop = []
+        variables_to_drop = []
+    if len(coordinates_to_drop) > 0:
+        # Drop all variables associated with the specified coordinates
+        for coord in coordinates_to_drop:
+            dsout = dsout.drop_vars([var for var in dsout.variables if coord in dsout[var].dims])
+    if len(variables_to_drop) > 0:
+        dsout = dsout.drop_vars(variables_to_drop)
+
+    # Rename variables
+    if tracker == 'tobac':
+        dsout = dsout.rename({'mcs_track_labels':'mcs_mask'})
+
+    # Convert mcs_mask data type to int
+    if dsout['mcs_mask'].dtype != int:
+        dsout['mcs_mask'] = dsout['mcs_mask'].astype(int)
+        # Replace negative (missing) values with 0
+        dsout['mcs_mask'] = dsout['mcs_mask'].where(dsout['mcs_mask'] > 0, other=0)
+        dsout['mcs_mask'].attrs['_FillValue'] = 0
+
+    # Round down the time coordinates to the nearest hour
+    dsout['time'] = dsout['time'].dt.floor('H')
+    # import pdb; pdb.set_trace()
 
     # Replace global attributes
     gattrs = {
