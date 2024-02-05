@@ -1,0 +1,57 @@
+---
+ARPEGE:
+  filename_intqv: 'tciwv_ARPNH_20160801-20160910_hourmean.nc'
+  filename_cape: 'cape_ARPNH_20160801-20160910_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'tciwv'
+  cape: 'CAPE_INS'
+MPAS: 
+  filename_intqv: 'MPAS_3.75km_vert_int_qv_0.10deg_-60_60_hourmean.nc'
+  filename_cape: 'MPAS_3.75km_cape_0.10deg_-60_60_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'vert_int_qv'
+  cape: 'cape'
+FV3:
+  filename_intqv: 'fv3_intqv_0.10deg_-60_60_hourmean.nc'
+  filename_cape: 'fv3_cape_0.10deg_-60_60_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'intqv'
+  cape: 'cape'
+IFS:
+  filename_intqv: 'intqv_ifs_0.1deg.nc'
+  filename_cape: 'cape_IFS_60S-60N_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'tcwv'
+  cape: 'cape'
+NICAM:
+  filename_intqv: 'sa_vap_atm_summer_0.1deg_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'sa_vap_atm'
+SAM:
+  filename_intqv: 'SAM_PW_0.1deg_-60_60_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'PW'
+UM:
+  filename_intqv: 'prw_1hr_HadGEM3-GA71_hourmean.nc'
+  filename_cape: 'cape_1hr_HadGEM3-GA71_hourmean.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'atmosphere_water_vapor_content'
+  cape: ''
+OBS:
+  dirname: '/global/cfs/projectdirs/m3522/cmip6/ERA5/e5.oper.an.sfc/'
+  file_basename: 'e5.oper.an.sfc.128_'
+  intqv_basename: '137_tcwv.ll025sc.'
+  cape_basename: '059_cape.ll025sc.'
+  xcoord_name: 'longitude'
+  ycoord_name: 'latitude'
+  intqv: 'TCWV'
+  cape: 'CAPE'
+  nx: 12
+  ny: 12

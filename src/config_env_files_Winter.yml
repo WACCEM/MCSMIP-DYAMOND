@@ -1,0 +1,8 @@
+---
+OBS:
+  dirname: '/global/cfs/projectdirs/m3522/cmip6/ERA5/e5.oper.an.sfc/'
+  file_basename: 'e5.oper.an.sfc.128_'
+  intqv_basename: '137_tcwv.ll025sc.'
+  xcoord_name: 'longitude'
+  ycoord_name: 'latitude'
+  intqv: 'TCWV'
