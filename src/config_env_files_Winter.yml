@@ -1,8 +1,61 @@
 ---
+ARPEGE:
+  filename_intqv: 'prw_1hr_ARPEGE-NH-2km_20200120-20200228_60S-60N.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'prw'
+  cape: ''
+GEOS:
+  filename_intqv: 'prvvi_15min_GEOS-3km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60N.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'prvvi'
+  cape: ''
+GRIST:
+  filename_intqv: 'prw_15min_GRIST-5km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60N.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'prw'
+  cape: ''
+IFS:
+  filename_intqv: 'prw_1hr_IFS-4km__20200120-20200228_60S-60N.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'prw'
+  cape: ''
+SAM:
+  filename_intqv: 'qvi_15min_gSAM-4km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60N.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'qvi'
+  cape: ''
+UM:
+  filename_intqv: 'prw_UM-5km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60n.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'prw'
+  cape: ''
+XSHiELD:
+  filename_intqv: 'qvi_15min_SHiELD-3km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60n.nc'
+  filename_cape: ''
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'qvi'
+  cape: ''
 OBS:
   dirname: '/global/cfs/projectdirs/m3522/cmip6/ERA5/e5.oper.an.sfc/'
   file_basename: 'e5.oper.an.sfc.128_'
   intqv_basename: '137_tcwv.ll025sc.'
+  cape_basename: '059_cape.ll025sc.'
   xcoord_name: 'longitude'
   ycoord_name: 'latitude'
   intqv: 'TCWV'
+  cape: 'CAPE'
+  nx: 12
+  ny: 12

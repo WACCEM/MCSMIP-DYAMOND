@@ -13,24 +13,30 @@ if __name__ == "__main__":
     PHASE = sys.argv[1]
     # Name of the tracker (e.g., 'PyFLEXTRKR', 'MOAAP')
     tracker = sys.argv[2]
+    
+    # Submit slurm job
+    submit_job = True
 
     # Environmental variable name
     env_varname = 'intqv'
-
-    # Submit slurm job
-    submit_job = True
 
     code_dir = '/global/homes/f/feng045/program/mcsmip/dyamond/src/'
     # slurm_dir = code_dir
     # code_name = f'{code_dir}unify_dyamond_olr_pcp_files.py'
     # code_name = f'{code_dir}unify_mask_files.py'
+    # code_name = f'{code_dir}unify_env_files.py'
     # code_name = f'{code_dir}make_mcs_maskfile_singlefile.py'
     # code_name = f'{code_dir}calc_tbpf_mcs_rainmap_mcsmip.py'
     # code_name = f'{code_dir}make_mcs_stats_from_maskfile.py'
     # code_name = f'{code_dir}extract_mcs_2d_env.py'
-    code_name = f'{code_dir}avg_mcs_track_env_space.py'
+    # code_name = f'{code_dir}avg_mcs_track_env_space.py'
     # code_name = f'{code_dir}avg_global_env_map_timeseries.py'
     # code_name = f'{code_dir}avg_global_rain_timeseries.py'
+    # code_name = f'{code_dir}calc_tb_rainrate_pdf_byregion.py'
+    # code_name = f'{code_dir}regrid_tbpcp2era5.py'
+    # code_name = f'{code_dir}regrid_mcsmask2era5.py'
+    # code_name = f'{code_dir}regrid_envs2era5.py'
+    code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
     config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
     config_basename = f'config_dyamond_'
     slurm_basename = f'slurm_dyamond_'
@@ -40,6 +46,8 @@ if __name__ == "__main__":
         wallclock_time = '00:10:00'
     elif 'unify_mask_files' in code_name:
         wallclock_time = '00:10:00'
+    elif 'unify_env_files' in code_name:
+        wallclock_time = '00:15:00'
     elif 'make_mcs_maskfile_singlefile' in code_name:
         wallclock_time = '00:15:00'
     elif 'calc_tbpf_mcs_rainmap_mcsmip' in code_name:
@@ -54,6 +62,16 @@ if __name__ == "__main__":
         wallclock_time = '00:05:00'
     elif 'avg_global_rain_timeseries' in code_name:
         wallclock_time = '00:10:00'
+    elif 'calc_tb_rainrate_pdf_byregion' in code_name:
+        wallclock_time = '00:10:00'
+    elif 'regrid_tbpcp2era5' in code_name:
+        wallclock_time = '00:10:00'
+    elif 'regrid_mcsmask2era5' in code_name:
+        wallclock_time = '00:10:00'
+    elif 'regrid_envs2era5' in code_name:
+        wallclock_time = '00:10:00'
+    elif 'calc_mcs_pcp_envs_pairs' in code_name:
+        wallclock_time = '02:00:00'
 
     # DYAMOND phase start date
     if PHASE == 'Summer':
@@ -84,13 +102,13 @@ if __name__ == "__main__":
             'ARPEGE',
             'GEOS',
             'GRIST',
-            'ICON',
+            # 'ICON',
             'IFS',
-            'MPAS',
-            'NICAM',
+            # 'MPAS',
+            # 'NICAM',
             'OBS',
             'SAM',
-            'SCREAM',
+            # 'SCREAM',
             'UM',
             'XSHiELD',
         ]
@@ -113,6 +131,8 @@ if __name__ == "__main__":
             cmd = f'python {code_name} {config_file}'
         elif 'unify_mask_files' in code_name:
             cmd = f'python {code_name} {PHASE} {run} {tracker}'
+        elif 'unify_env_files' in code_name:
+            cmd = f'python {code_name} {PHASE} {run} {env_varname}'
         elif 'extract_mcs_2d_env' in code_name:
             cmd = f'python {code_name} {PHASE} {run} {tracker} {env_varname}'
         elif 'avg_mcs_track_env_space' in code_name:
@@ -121,6 +141,16 @@ if __name__ == "__main__":
             cmd = f'python {code_name} {PHASE} {run} {env_varname} {start_date} {end_date}'
         elif 'avg_global_rain_timeseries' in code_name:
             cmd = f'python {code_name} {PHASE} {run}'
+        elif 'calc_tb_rainrate_pdf_byregion' in code_name:
+            cmd = f'python {code_name} {PHASE} {run} {tracker}'
+        elif 'regrid_tbpcp2era5' in code_name:
+            cmd = f'python {code_name} {PHASE} {run}'
+        elif 'regrid_mcsmask2era5' in code_name:
+            cmd = f'python {code_name} {PHASE} {run} {tracker}'
+        elif 'regrid_envs2era5' in code_name:
+            cmd = f'python {code_name} {PHASE} {run} {env_varname}'
+        elif 'calc_mcs_pcp_envs_pairs' in code_name:
+            cmd = f'python {code_name} {PHASE} {run} {tracker} {env_varname} {start_date} {end_date}'
         else:
             cmd = f'python {code_name} {config_file} {tracker} {start_date} {end_date}'
         task_file.write(f"{cmd}\n")

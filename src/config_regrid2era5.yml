@@ -1,0 +1,12 @@
+---
+# Destination grid file that contains lat/lon grid info
+# Produced by prepare_era5_landmask_file.py
+gridfile_dst: '/pscratch/sd/f/feng045/DYAMOND/maps/era5_landmask.nc'
+# Source grid file
+gridfile_src: '/pscratch/sd/f/feng045/DYAMOND/maps/IMERG_landmask_180W-180E_60S-60N.nc'
+# Source grid x/y coordinate variable names
+x_coordname_src: 'lon'
+y_coordname_src: 'lat'
+# Destination grid x/y coordinate variable names
+x_coordname_dst: 'lon'
+y_coordname_dst: 'lat'

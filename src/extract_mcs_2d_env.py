@@ -14,7 +14,7 @@ from dask.distributed import Client, LocalCluster
 def extract_env_2d(idatetime, mcs_lat, mcs_lon, ny, nx, varname):
 
     # Read environment file
-    dse = xr.open_dataset(env_file).sel(time=idatetime)
+    dse = xr.open_dataset(env_file).sel(time=idatetime, method='nearest')
     lat_e = dse['lat']
     lon_e = dse['lon']
     time_e = dse['time']
@@ -113,10 +113,10 @@ if __name__ == "__main__":
     rmcs_lat = dsm['meanlat']
     rmcs_lon = dsm['meanlon']
 
-    # For OBS (ERA5), check if longitude is [-180~+180], if so convert it to [0~360]
-    if (runname == 'OBS') & (np.nanmin(rmcs_lon) < 0):
-        rmcs_lon = rmcs_lon % 360
-        print('MCS longitudes are [-180~+180], converted to [0-360] to match ERA5.')
+    # # For OBS (ERA5), check if longitude is [-180~+180], if so convert it to [0~360]
+    # if (runname == 'OBS') & (np.nanmin(rmcs_lon) < 0):
+    #     rmcs_lon = rmcs_lon % 360
+    #     print('MCS longitudes are [-180~+180], converted to [0-360] to match ERA5.')
 
     # Get end times for all tracks
     rmcs_basetime = dsm['base_time']
