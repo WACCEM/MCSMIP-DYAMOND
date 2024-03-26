@@ -37,6 +37,11 @@ SAM:
   xcoord_name: 'lon'
   ycoord_name: 'lat'
   intqv: 'PW'
+SCREAMv1:
+  filename_intqv: 'tcwv_scream_summer.nc'
+  xcoord_name: 'lon'
+  ycoord_name: 'lat'
+  intqv: 'VapWaterPath'
 UM:
   filename_intqv: 'prw_1hr_HadGEM3-GA71_hourmean.nc'
   filename_cape: 'cape_1hr_HadGEM3-GA71_hourmean.nc'
@@ -45,6 +50,17 @@ UM:
   intqv: 'atmosphere_water_vapor_content'
   cape: ''
 OBS:
+  dirname: '/global/cfs/projectdirs/m3522/cmip6/ERA5/e5.oper.an.sfc/'
+  file_basename: 'e5.oper.an.sfc.128_'
+  intqv_basename: '137_tcwv.ll025sc.'
+  cape_basename: '059_cape.ll025sc.'
+  xcoord_name: 'longitude'
+  ycoord_name: 'latitude'
+  intqv: 'TCWV'
+  cape: 'CAPE'
+  nx: 12
+  ny: 12
+OBSv7:
   dirname: '/global/cfs/projectdirs/m3522/cmip6/ERA5/e5.oper.an.sfc/'
   file_basename: 'e5.oper.an.sfc.128_'
   intqv_basename: '137_tcwv.ll025sc.'

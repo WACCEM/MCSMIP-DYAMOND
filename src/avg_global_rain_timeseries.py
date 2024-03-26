@@ -2,7 +2,7 @@
 Calculate global mean total, MCS precipitation time series and save output to a netCDF file.
 """
 import numpy as np
-import sys
+import sys, os
 import xarray as xr
 import pandas as pd
 import time
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # Outputs 
     out_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs/'
     out_filename_timeseries = f'{out_dir}{PHASE}_{runname}_rain_timeseries.nc'
-    # out_filename_map = f'{out_dir}{PHASE}_{runname}_rain_map.nc'
+    os.makedirs(out_dir, exist_ok=True)
 
     # Specify regions and time periods for averaging
     if PHASE == 'Summer':
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # Read precipitation data
     dsr = xr.open_dataset(rain_file)
-    ntimes = dsr.dims['time']
+    ntimes = dsr.sizes['time']
     lon_r = dsr['lon']
     lat_r = dsr['lat']
 

@@ -10,8 +10,6 @@ if __name__ == "__main__":
 
     # Get PHASE from input ('Summer' or 'Winter')
     PHASE = sys.argv[1]
-    # Name of the tracker (e.g., 'PyFLEXTRKR', 'MOAAP')
-    # tracker = sys.argv[2]
 
     # Flag to call Python codes to make plots
     make_plots = True
@@ -49,6 +47,7 @@ if __name__ == "__main__":
 
 
     # Tracker names
+    # Trackers = ['PyFLEXTRKR']
     Trackers = [
         'PyFLEXTRKR',
         'MOAAP',
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     # Model names
     if (PHASE == 'Summer'):
-        # runnames = ['OBS']
+        # runnames = ['OBSv7', 'SCREAMv1']
         runnames = [
             'ARPEGE',
             'FV3',
@@ -72,7 +71,7 @@ if __name__ == "__main__":
             'UM',
         ]
     elif (PHASE == 'Winter'):
-        # runnames=['SAM']
+        # runnames = ['OBSv7', 'SCREAMv1']
         runnames = [
             'ARPEGE',
             'GEOS',

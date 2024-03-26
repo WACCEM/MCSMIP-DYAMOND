@@ -10,6 +10,7 @@ from dask.distributed import Client, LocalCluster
 def subset_vars(infiles):
     # List of variables to exclude
     drop_varlist = [
+        # 'lon', 'lat',
         'base_time', 'latitude', 'longitude',
         'cloudtype', 'cloudnumber', 'nfeatures',
         'tb', 'precipitation',
@@ -21,7 +22,7 @@ def subset_vars(infiles):
 
     # Read Input files
     print(f'Reading input files from: {in_dir }')
-    ds = xr.open_mfdataset(infiles, drop_variables=drop_varlist, mask_and_scale=False, chunks={'time': 'auto'})
+    ds = xr.open_mfdataset(infiles, drop_variables=drop_varlist, mask_and_scale=False, chunks={'time': 'auto'}, concat_dim='time', combine='nested')
     # ds = xr.open_mfdataset(infiles, drop_variables=drop_varlist, mask_and_scale=False, chunks=None)
     print(f'Done reading input files.')
 
@@ -116,7 +117,7 @@ if __name__=='__main__':
     os.makedirs(out_dir, exist_ok=True)
 
     # Set flag to run in parallel (1) or serial (0)
-    run_parallel = 0
+    run_parallel = 1
     # Number of workers for Dask
     n_workers = 128
     # Threads per worker
@@ -124,7 +125,6 @@ if __name__=='__main__':
 
     # Find all input files
     input_files = sorted(glob.glob(f'{in_dir}{in_basename}*.nc'))
-    # import pdb; pdb.set_trace()
 
     if run_parallel==1:
         # Initialize dask

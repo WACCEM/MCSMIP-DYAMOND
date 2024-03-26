@@ -598,10 +598,13 @@ if __name__ == "__main__":
     reference_time = np.datetime64(f'{reference_date}T00:00:00')
 
     # OLR/PCP data file suffix
-    if runname == 'OBS':
-        suffix = '_4km-pixel'
-    else:
-        suffix = ''
+    # if runname == 'OBS':
+    #     suffix = '_4km-pixel'
+    # elif runname == 'OBSv7':
+    #     suffix = '_10km-pixel'
+    # else:
+    #     suffix = ''
+    suffix = ''
 
     # Parallel setup
     run_parallel = 1

@@ -3,10 +3,12 @@ Unify the DYAMOND OLR/precipitation files:
 - Rename the coordinate names to: time, lon, lat
 - Replace the lat, lon coordinate values with a reference grid file
 - Rename the variable names to: olr, precipitation
+- Subset time for OBS to hourly
 """
 # import numpy as np
 import glob, sys, os
 import time
+import numpy as np
 import xarray as xr
 import dask
 from dask.distributed import Client, LocalCluster, wait
@@ -17,10 +19,7 @@ def harmonize_file(filename):
     fn = os.path.basename(filename)
     # Model filename: basename_yyyymoddhh.nc
     # OBS filename: merg_2016080100_4km-pixel.nc
-    if runname != 'OBS':
-        fn_datetime = fn[len(databasename):-3]
-    else:
-        fn_datetime = fn[len(databasename):-13]
+    fn_datetime = fn[len(databasename):len(databasename)+10]
 
     # Get variable names from config
     time_coordname = config['time_coordname']
@@ -28,10 +27,11 @@ def harmonize_file(filename):
     y_coordname = config['y_coordname']
     olr_varname = config.get('olr_varname', None)
     pcp_varname = config['pcp_varname']
+    idclouds_minute = config.get('idclouds_minute', 0)
     if olr_varname is None:
         olr_varname = config.get('tb_varname')
 
-    # Read lon from reference grid
+    # Read lat/lon from reference grid
     dsref = xr.open_dataset(ref_grid)
     lon_ref = dsref['lon']
     lat_ref = dsref['lat']
@@ -39,10 +39,20 @@ def harmonize_file(filename):
     # Read input data
     drop_vars = ['gw', 'lat_bnds', 'lon_bnds', 'area']
     ds = xr.open_dataset(filename, drop_variables=drop_vars)
+    # For OBS, subset from one of the 30 min snapshot
+    if 'OBS' in runname:
+        # Get minutes from DataSet time coordinate
+        t_coord_minute = ds[time_coordname].dt.minute.data
+        # Find the closest time index matching idclouds_minute
+        t_idx = np.argmin(np.absolute(t_coord_minute - idclouds_minute))
+        # Select the first time step while keeping the time dimension
+        ds = ds.isel({time_coordname:slice(t_idx,1)})
+
     # Change time coordinate encoding
     ds[time_coordname].encoding['units'] = f'hours since {start_datetime}'
     # Round down the time to the nearest hour
-    t_coord_new = ds[time_coordname].dt.floor('H')
+    # t_coord_new = ds[time_coordname].dt.floor('H')
+    t_coord_new = ds[time_coordname].dt.round('H')
     # Replace the lat/lon coordinates
     ds = ds.assign_coords({time_coordname:t_coord_new, x_coordname:lon_ref, y_coordname:lat_ref})
     # Rename dimensions
@@ -53,12 +63,20 @@ def harmonize_file(filename):
     # })
     # Rename time, OLR, precipitation variables
     ds = ds.rename({
-        time_coordname: 'time', 
         x_coordname: 'lon',
         y_coordname: 'lat',
         olr_varname: 'olr', 
         pcp_varname: 'precipitation',
     })
+    if time_coordname != 'time':
+        ds = ds.rename({time_coordname: 'time'})
+    
+    # Correct SCREAMv1 precipitation units (kg m^-2 per 100s)
+    # It was incorrectly interpreted as (kg m^-2 per 75s)
+    # if runname == 'SCREAMv1':
+    #     ds['precipitation'] = ds['precipitation'] * 0.75
+        # import pdb; pdb.set_trace()
+
     # Replace OLR & precipitation attributes
     olr_attr = {
         'long_name': 'Top of atmosphere outgoing longwave radiation',
@@ -71,7 +89,7 @@ def harmonize_file(filename):
     ds['olr'].attrs = olr_attr
     ds['precipitation'].attrs = pcp_attr
     # For OBS, keep Tb
-    if runname == 'OBS':
+    if 'OBS' in runname:
         ds = ds.rename({'olr':'Tb'})
         ds['Tb'].attrs = {
             'long_name': 'Brightness temperature',
@@ -106,7 +124,6 @@ def harmonize_file(filename):
     ds.to_netcdf(path=out_filename, mode="w", format="NETCDF4", unlimited_dims='time', encoding=encoding)
     print(f"{out_filename}")
 
-    # import pdb; pdb.set_trace()
     return
 
 
@@ -114,15 +131,17 @@ if __name__ == "__main__":
     
     # Get inputs from command line
     config_file = sys.argv[1]
+    PHASE = sys.argv[2]
+    runname = sys.argv[3]
     
     print(f'Start time: {time.ctime(time.time())}')
 
-    # Get runname and PHASE from config_file name
-    parts = config_file.split("/")
-    config_file_basename = parts[-1]
-    # Config filname format: config_dyamond_PHASE_runname.yml
-    runname = config_file_basename.split("_")[-1].split(".")[0]
-    PHASE = config_file_basename.split("_")[-2].capitalize()
+    # # Get runname and PHASE from config_file name
+    # parts = config_file.split("/")
+    # config_file_basename = parts[-1]
+    # # Config filname format: config_dyamond_PHASE_runname.yml
+    # runname = config_file_basename.split("_")[-1].split(".")[0]
+    # PHASE = config_file_basename.split("_")[-2].capitalize()
     print(f'{PHASE} {runname}')
 
     if PHASE == 'Summer':
@@ -140,7 +159,7 @@ if __name__ == "__main__":
     
     # Parallel setup
     run_parallel = 1
-    n_workers = 128
+    n_workers = 64
 
     # Get inputs from configuration file
     config = load_config(config_file)

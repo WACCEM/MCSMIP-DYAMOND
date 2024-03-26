@@ -65,15 +65,17 @@ if __name__ == "__main__":
 
     # Read precipitation data
     dsr = xr.open_dataset(rain_file)
-    ntimes = dsr.dims['time']
+    ntimes = dsr.sizes['time']
     lon_r = dsr['lon']
     lat_r = dsr['lat']
+    print(f'Finished reading: {rain_file}')
 
     # Read mask data
     dsm = xr.open_dataset(mask_file)
     # Replace lat/lon
     dsm['lon'] = lon_r
     dsm['lat'] = lat_r
+    print(f'Finished reading: {mask_file}')
 
     # Check time encoding from the precipitation file
     time_encoding = dsr['time'].encoding.get('calendar', None)
@@ -92,9 +94,10 @@ if __name__ == "__main__":
         lon=slice(lon_bounds[0], lon_bounds[1]), 
         lat=slice(lat_bounds[0], lat_bounds[1]),
     )
+    print(f'Finished combining two datasets.')
 
     # Red Tb for OBS data, convert OLR to Tb for model data
-    if runname == 'OBS':
+    if 'OBS' in runname:
         tb = ds[tb_varname]
     else:
         olr = ds[olr_varname]
@@ -110,15 +113,22 @@ if __name__ == "__main__":
     olr_range = (np.min(bins_olr), np.max(bins_olr))
 
     # Compute histograms
-    if runname != 'OBS':
+    print(f'Computing OLR/Tb histogram ...')
+    if 'OBS' not in runname:
         olr_hist, bins = np.histogram(olr, bins=bins_olr, range=olr_range, density=False)
     else:
         olr_hist = np.zeros(len(bins_olr)-1)
 
+    print(f'Computing total precipitation histogram ...')
     tb_hist, bins = np.histogram(tb, bins=bins_tb, range=tb_range, density=False)
     totpcp_hist, bins = np.histogram(ds['precipitation'], bins=bins_pcp, range=pcp_range, density=False)
 
+    # MCS Tb
+    mcstb = tb.where(ds['mcs_mask'] > 0)
+    mcstb_hist, bins = np.histogram(mcstb, bins=bins_tb, range=tb_range, density=False)
+
     # MCS precipitation mask
+    print(f'Computing MCS precipitation histogram ...')
     mcspcp = ds['precipitation'].where(ds['mcs_mask'] > 0)
     mcspcp_hist, bins = np.histogram(mcspcp, bins=bins_pcp, range=pcp_range, density=False)
     # import pdb; pdb.set_trace()
@@ -142,6 +152,7 @@ if __name__ == "__main__":
         'tb': (['bins_tb'], tb_hist, tb_attrs),
         'total_pcp': (['bins_pcp'], totpcp_hist, totpcp_attrs),
         'mcs_pcp': (['bins_pcp'], mcspcp_hist, mcspcp_attrs),
+        'mcs_tb': (['bins_tb'], mcstb_hist, tb_attrs)
     }
     coord_dict = {
         'bins_olr': (['bins_olr'], bins_olr[:-1], bins_olr_attrs),

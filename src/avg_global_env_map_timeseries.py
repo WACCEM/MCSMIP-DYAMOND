@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     # Read input data
     ds = xr.open_dataset(env_file)
-    ntimes = ds.dims['time']
+    ntimes = ds.sizes['time']
     longitude = ds['lon']
     latitude = ds['lat']
     # Get total number of grids

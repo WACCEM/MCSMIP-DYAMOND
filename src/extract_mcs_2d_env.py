@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # Get inputs from configuration file
     stream = open(config_file, 'r')
     config = yaml.full_load(stream)
-    if runname == 'OBS':
+    if (runname == 'OBS') | (runname == 'OBSv7'):
         nx = config[runname]['nx']
         ny = config[runname]['ny']
         dx = '0.25deg'

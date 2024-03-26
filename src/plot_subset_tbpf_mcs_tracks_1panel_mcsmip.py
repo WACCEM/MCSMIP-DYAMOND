@@ -487,8 +487,8 @@ def work_for_time_loop(olr_file, mask_file, track_dict, map_info, plot_info):
     # Read MCS mask file, subset to intput datetime range
     dsm = xr.open_dataset(mask_file).sel(time=slice(start_datetime, end_datetime))
 
-    nt_dso = dso.dims['time']
-    nt_dsm = dsm.dims['time']
+    nt_dso = dso.sizes['time']
+    nt_dsm = dsm.sizes['time']
     # Replace the lat/lon coordinates
     if nt_dso == nt_dsm:
         dsm = dsm.assign_coords({'time':dso['time'], 'lon':dso['lon'], 'lat':dso['lat']})
@@ -497,14 +497,12 @@ def work_for_time_loop(olr_file, mask_file, track_dict, map_info, plot_info):
         print(f'Code will exit now.')
         sys.exit()
 
-    if runname != 'OBS':
+    if 'OBS' not in runname:
         # Convert OLR to Tb
         tb = olr_to_tb(dso['olr'])
         # Add Tb to DataSet
         dso['Tb'] = tb
     
-    # import pdb; pdb.set_trace()
-
     # Combine OLR/precipitation and MCS mask DataSets
     ds = xr.combine_by_coords([dsm, dso], combine_attrs='drop_conflicts')
     # lon2d, lat2d = np.meshgrid(ds['lon'], ds['lat'])
@@ -553,7 +551,7 @@ def work_for_time_loop(olr_file, mask_file, track_dict, map_info, plot_info):
             ds_sub = ds
 
         # Get number of times in the DataSet
-        ntimes = ds_sub.dims['time']
+        ntimes = ds_sub.sizes['time']
 
         # Serial
         if run_parallel == 0:

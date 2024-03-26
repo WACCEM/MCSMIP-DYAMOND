@@ -174,8 +174,8 @@ def prep_data(olr_file, mask_file, map_info, plot_info):
     # Read MCS mask file, subset to intput datetime range
     dsm = xr.open_dataset(mask_file).sel(time=slice(start_datetime, end_datetime))
 
-    nt_dso = dso.dims['time']
-    nt_dsm = dsm.dims['time']
+    nt_dso = dso.sizes['time']
+    nt_dsm = dsm.sizes['time']
         
     # Replace the lat/lon coordinates
     if nt_dso == nt_dsm:
@@ -185,7 +185,7 @@ def prep_data(olr_file, mask_file, map_info, plot_info):
         print(f'Code will exit now.')
         sys.exit()
 
-    if runname != 'OBS':
+    if 'OBS' not in runname:
         # Convert OLR to Tb
         tb = olr_to_tb(dso['olr'])
         # Add Tb to DataSet

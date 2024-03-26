@@ -63,7 +63,7 @@ if __name__ == "__main__":
         ds_datetimeindex = ds.indexes['time'].to_datetimeindex()
         # Replace the original time coordinate
         ds = ds.assign_coords({'time': ds_datetimeindex})
-    ntimes_pcp = ds.dims['time']
+    ntimes_pcp = ds.sizes['time']
     out_time = ds['time'].isel(time=0)
     lon = ds['lon']
     lat = ds['lat']

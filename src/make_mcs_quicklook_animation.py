@@ -12,8 +12,6 @@ if __name__ == "__main__":
 
     # Get PHASE from input ('Summer' or 'Winter')
     PHASE = sys.argv[1]
-    # Name of the tracker (e.g., 'PyFLEXTRKR', 'MOAAP')
-    # tracker = sys.argv[2]
 
     # Submit slurm job
     # submit_job = True
@@ -37,20 +35,25 @@ if __name__ == "__main__":
         # Domain extent (lonmin, lonmax, latmin, latmax)
         region = 'AFC'
         extent = [-5.0, 35.0, 0.0, 20.0]
+
         # region = 'WPAC'
         # extent = [125.0, 165.0, 10.0, 30.0]
+
         start_date = '2016-08-10T00'
         end_date = '2016-08-15T00'
     elif PHASE == 'Winter':
          # Domain extent (lonmin, lonmax, latmin, latmax)
         region = 'IO'
         extent = [55.0, 95.0, -20.0, 0.0]
+
         # region = 'AMZ'
         # extent = [-75, -35, -20.0, 0.0]
+
         start_date = '2020-02-01T00'
         end_date = '2020-02-06T00'
 
     # Tracker names
+    # Trackers = ['PyFLEXTRKR']
     Trackers = [
         'PyFLEXTRKR',
         'MOAAP',
@@ -62,7 +65,7 @@ if __name__ == "__main__":
 
     # Model names
     if (PHASE == 'Summer'):
-        # runnames = ['OBS']
+        # runnames = ['OBSv7', 'SCREAMv1']
         runnames = [
             'ARPEGE',
             'FV3',
@@ -74,7 +77,7 @@ if __name__ == "__main__":
             'UM',
         ]
     elif (PHASE == 'Winter'):
-        # runnames=['GRIST']
+        # runnames = ['OBSv7', 'SCREAMv1']
         runnames = [
             'ARPEGE',
             'GEOS',

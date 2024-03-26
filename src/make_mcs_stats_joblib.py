@@ -32,11 +32,11 @@ if __name__ == "__main__":
     # code_name = f'{code_dir}avg_mcs_track_env_space.py'
     # code_name = f'{code_dir}avg_global_env_map_timeseries.py'
     # code_name = f'{code_dir}avg_global_rain_timeseries.py'
-    # code_name = f'{code_dir}calc_tb_rainrate_pdf_byregion.py'
+    code_name = f'{code_dir}calc_tb_rainrate_pdf_byregion.py'
     # code_name = f'{code_dir}regrid_tbpcp2era5.py'
     # code_name = f'{code_dir}regrid_mcsmask2era5.py'
     # code_name = f'{code_dir}regrid_envs2era5.py'
-    code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
+    # code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
     config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
     config_basename = f'config_dyamond_'
     slurm_basename = f'slurm_dyamond_'
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     elif 'avg_global_rain_timeseries' in code_name:
         wallclock_time = '00:10:00'
     elif 'calc_tb_rainrate_pdf_byregion' in code_name:
-        wallclock_time = '00:10:00'
+        wallclock_time = '00:15:00'
     elif 'regrid_tbpcp2era5' in code_name:
         wallclock_time = '00:10:00'
     elif 'regrid_mcsmask2era5' in code_name:
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     # Model names
     if (PHASE == 'Summer'):
-        # runnames = ['MPAS']
+        # runnames = ['SCREAMv1']
         runnames = [
             'ARPEGE',
             'FV3',
@@ -97,18 +97,18 @@ if __name__ == "__main__":
             'UM',
         ]
     elif (PHASE == 'Winter'):
-        # runnames=['SCREAM', 'XSHiELD']
+        # runnames=['SCREAMv1']
         runnames = [
             'ARPEGE',
             'GEOS',
             'GRIST',
-            # 'ICON',
+            'ICON',
             'IFS',
-            # 'MPAS',
+            'MPAS',
             # 'NICAM',
             'OBS',
             'SAM',
-            # 'SCREAM',
+            'SCREAM',
             'UM',
             'XSHiELD',
         ]
