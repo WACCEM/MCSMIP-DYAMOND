@@ -554,7 +554,6 @@ def featurestats_singlefile(
                     "_FillValue": fillval_f,
                 },
             }
-            # import pdb; pdb.set_trace()
             print(f'Done processing: {olrpcp_filename}')
             return out_dict, out_dict_attrs, var_names_2d
 
@@ -717,7 +716,6 @@ if __name__ == "__main__":
     # Find unique track numbers
     unique_mcs_tracknum = set(number for sublist in list_mcs for number in sublist)
     unique_mcs_tracknum = sorted(list(unique_mcs_tracknum))
-    # import pdb; pdb.set_trace()
 
     print(f'Making base_times for each track ...')
     # Loop over each track
@@ -738,7 +736,6 @@ if __name__ == "__main__":
             itime = list_mcs_times[tidx_tracknum]
             hours_since_reference = (itime - reference_time) / np.timedelta64(1, 'h')
             mcs_times[ii, :len(tidx_tracknum)] = hours_since_reference.astype(int).data
-    # import pdb; pdb.set_trace()
 
     # Get track duration, start/end time
     mcs_exist = mcs_times > 0
