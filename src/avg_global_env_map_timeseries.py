@@ -3,7 +3,45 @@ import xarray as xr
 import pandas as pd
 import sys, os
 import time
-import yaml
+import cftime
+
+# def convert_calendar(ds, target_calendar):
+#     # Convert the time coordinate to a specific calendar
+#     time_var = ds['time']
+#     num_dates = cftime.date2num(time_var.values, time_var.encoding.get('units', None), calendar=target_calendar)
+#     converted_dates = cftime.num2date(num_dates, time_var.encoding.get('units', None), calendar=target_calendar)
+    
+#     # Update the dataset
+#     ds['time'] = ('time', converted_dates)
+#     ds['time'].attrs['calendar'] = target_calendar
+#     return ds
+
+def convert_calendar(ds, target_calendar, freq='1h', time_coord_name='time'):
+    """
+    Convert calendar encoding for an Xarray DataSet
+
+    Args:
+        ds: Xarray DataSet
+            Input Xarray DataSet.
+        target_calendar: string
+            Calendar to convert the encoding of the DataSet to.
+        freq: string, default='1h'
+            Frequency of the time variable
+        time_coord_name: string, default='time'
+            Name of the time coordinate in the DataSet
+
+    Returns:
+        ds: Xarray DataSet
+            Output Xarray DataSet
+    """
+    # Get number of times from the DataSet
+    ntimes = ds.sizes[time_coord_name]
+    # Make a new DatetimeIndex for specific frequency and calendar
+    time_DatetimeIndex = xr.cftime_range(start=ds[time_coord_name].values[0], periods=ntimes, freq=freq, calendar=target_calendar).to_datetimeindex()
+    # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
+    time_mcs_mask = xr.DataArray(time_DatetimeIndex, coords={time_coord_name: time_DatetimeIndex}, dims=time_coord_name)
+    ds[time_coord_name] = time_mcs_mask
+    return ds
 
 if __name__ == "__main__":
 
@@ -47,6 +85,11 @@ if __name__ == "__main__":
     ny = ds.sizes['lat']
     nx = ds.sizes['lon']
 
+    # Convert 'noleap'/'365_day' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
+    if (ds['time'].encoding.get('calendar')  == '365_day'):        
+        ds = convert_calendar(ds, 'noleap')
+    # import pdb; pdb.set_trace()
+
     # Average within specified region to get time series
     print(f'Calculating spatial average ...')
     VAR_avg_timeseries = ds[varname].sel(
@@ -56,7 +99,8 @@ if __name__ == "__main__":
 
     # Average between specified time period
     print(f'Calculating temporal average ...')
-    VAR_avg_map = ds[varname].sel(time=slice(datetime_range[0], datetime_range[1])).mean(dim='time', keep_attrs=True)
+    VAR_avg_map = ds[varname].sel(time=slice(start_date, end_date)).mean(dim='time', keep_attrs=True)
+    # VAR_avg_map = ds[varname].sel(time=slice(datetime_range[0], datetime_range[1])).mean(dim='time', keep_attrs=True)
 
     #-------------------------------------------------------------------------
     # Write output time series file

@@ -6,6 +6,35 @@ import sys, os
 import xarray as xr
 import pandas as pd
 import time
+import cftime
+
+def convert_calendar(ds, target_calendar, freq='1h', time_coord_name='time'):
+    """
+    Convert calendar encoding for an Xarray DataSet
+
+    Args:
+        ds: Xarray DataSet
+            Input Xarray DataSet.
+        target_calendar: string
+            Calendar to convert the encoding of the DataSet to.
+        freq: string, default='1h'
+            Frequency of the time variable
+        time_coord_name: string, default='time'
+            Name of the time coordinate in the DataSet
+
+    Returns:
+        ds: Xarray DataSet
+            Output Xarray DataSet
+    """
+    # Get number of times from the DataSet
+    ntimes = ds.sizes[time_coord_name]
+    # Make a new DatetimeIndex for specific frequency and calendar
+    time_DatetimeIndex = xr.cftime_range(start=ds[time_coord_name].values[0], periods=ntimes, freq=freq, calendar=target_calendar).to_datetimeindex()
+    # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
+    time_mcs_mask = xr.DataArray(time_DatetimeIndex, coords={time_coord_name: time_DatetimeIndex}, dims=time_coord_name)
+    ds[time_coord_name] = time_mcs_mask
+    return ds
+
 
 if __name__ == "__main__":
 
@@ -47,8 +76,15 @@ if __name__ == "__main__":
     dsm['lon'] = lon_r
     dsm['lat'] = lat_r
 
+    # Convert 'noleap'/'365_day' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
+    if (dsr['time'].encoding.get('calendar') == '365_day'):
+        dsr = convert_calendar(dsr, 'noleap')
+    if (dsm['time'].encoding.get('calendar') == '365_day'):        
+        dsm = convert_calendar(dsm, 'noleap')
+
     # Combine DataSets
     ds = xr.merge([dsr, dsm], compat='no_conflicts')
+
     # Subset lat/lon to specified region
     lon_sub = ds['lon'].sel(lon=slice(lon_bounds[0], lon_bounds[1]))
     lat_sub = ds['lat'].sel(lat=slice(lat_bounds[0], lat_bounds[1]))

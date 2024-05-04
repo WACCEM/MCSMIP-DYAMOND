@@ -192,7 +192,9 @@ if __name__ == "__main__":
             'MPAS',
             'NICAM',
             'OBS',
+            'OBSv7',
             'SAM',
+            'SCREAMv1',
             'UM',
         ]
     elif (PHASE == 'Winter'):
@@ -204,10 +206,12 @@ if __name__ == "__main__":
             'ICON',
             'IFS',
             'MPAS',
-            'NICAM',
+            # 'NICAM',
             'OBS',
+            'OBSv7',
             'SAM',
             'SCREAM',
+            'SCREAMv1',
             'UM',
             'XSHiELD',
         ]

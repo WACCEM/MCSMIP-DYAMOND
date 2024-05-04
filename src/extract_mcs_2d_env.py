@@ -7,14 +7,58 @@ import pandas as pd
 from pandas.tseries.offsets import MonthEnd
 import sys, os
 import time
+import cftime
 import yaml
 import dask
 from dask.distributed import Client, LocalCluster
 
+# def convert_calendar(ds, target_calendar):
+#     # Convert the time coordinate to a specific calendar
+#     time_var = ds['time']
+#     num_dates = cftime.date2num(time_var.values, time_var.encoding.get('units', None), calendar=target_calendar)
+#     converted_dates = cftime.num2date(num_dates, time_var.encoding.get('units', None), calendar=target_calendar)
+    
+#     # Update the dataset
+#     ds['time'] = ('time', converted_dates)
+#     ds['time'].attrs['calendar'] = target_calendar
+#     return ds
+
+def convert_calendar(ds, target_calendar, freq='1h', time_coord_name='time'):
+    """
+    Convert calendar encoding for an Xarray DataSet
+
+    Args:
+        ds: Xarray DataSet
+            Input Xarray DataSet.
+        target_calendar: string
+            Calendar to convert the encoding of the DataSet to.
+        freq: string, default='1h'
+            Frequency of the time variable
+        time_coord_name: string, default='time'
+            Name of the time coordinate in the DataSet
+
+    Returns:
+        ds: Xarray DataSet
+            Output Xarray DataSet
+    """
+    # Get number of times from the DataSet
+    ntimes = ds.sizes[time_coord_name]
+    # Make a new DatetimeIndex for specific frequency and calendar
+    time_DatetimeIndex = xr.cftime_range(start=ds[time_coord_name].values[0], periods=ntimes, freq=freq, calendar=target_calendar).to_datetimeindex()
+    # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
+    time_mcs_mask = xr.DataArray(time_DatetimeIndex, coords={time_coord_name: time_DatetimeIndex}, dims=time_coord_name)
+    ds[time_coord_name] = time_mcs_mask
+    return ds
+
 def extract_env_2d(idatetime, mcs_lat, mcs_lon, ny, nx, varname):
 
     # Read environment file
-    dse = xr.open_dataset(env_file).sel(time=idatetime, method='nearest')
+    dse = xr.open_dataset(env_file)
+    # Convert calendar to 'proleptic_gregorian'
+    if (dse['time'].encoding.get('calendar') == '365_day'):
+        dse = convert_calendar(dse, 'noleap')
+    # Select closest time
+    dse = dse.sel(time=idatetime, method='nearest')
     lat_e = dse['lat']
     lon_e = dse['lon']
     time_e = dse['time']
@@ -311,3 +355,9 @@ if __name__ == "__main__":
     dsout.to_netcdf(path=out_filename, mode='w', format='NETCDF4', 
                     unlimited_dims='tracks', encoding=encoding)
     print(f'Output saved as: {out_filename}')
+
+    if run_parallel == 1:
+        # Close the client
+        client.close()
+        # Shutdown the cluster
+        cluster.close()

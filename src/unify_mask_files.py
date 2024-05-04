@@ -52,6 +52,10 @@ if __name__ == "__main__":
         mask_file = f'{in_dir}DYAMOND_{PHASE}_{runname}_MCS_masks.nc'
         xcoord_name = 'lon'
         ycoord_name = 'lat'
+    elif tracker == 'KFyAO':
+        mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
     else:
         print(f'ERROR: {tracker} file format is undefined.')
         print(f'Code will exist now.')
@@ -120,7 +124,7 @@ if __name__ == "__main__":
     #     dsout = ds.drop_vars([xcoord_name, ycoord_name])
     # else:
     #     dsout = ds
-    if (tracker == 'TOOCAN') | (tracker == 'tobac') | (tracker == 'TAMS') | (tracker == 'simpleTrack'):
+    if (tracker == 'TOOCAN') | (tracker == 'tobac') | (tracker == 'TAMS') | (tracker == 'simpleTrack') | (tracker == 'KFyAO'):
         dsout = ds
     else:
         dsout = ds.drop_vars([xcoord_name, ycoord_name])
@@ -155,7 +159,7 @@ if __name__ == "__main__":
         dsout['mcs_mask'].attrs['_FillValue'] = 0
 
     # Round down the time coordinates to the nearest hour
-    dsout['time'] = dsout['time'].dt.floor('H')
+    dsout['time'] = dsout['time'].dt.floor('h')
     # import pdb; pdb.set_trace()
 
     # Replace global attributes

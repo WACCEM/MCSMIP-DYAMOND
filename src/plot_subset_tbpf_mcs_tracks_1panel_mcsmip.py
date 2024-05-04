@@ -393,7 +393,7 @@ def plot_map_2panels(pixel_dict, plot_info, map_info, track_dict):
         idur = (ilifetime / time_res).astype(int)
         idiam = track_pf_diam.data[itrack,:idur]
         # Get basetime of the track and the track end time, round down the time to the nearest hour
-        ibt = track_bt.dt.floor('H').data[itrack,:idur]
+        ibt = track_bt.dt.floor('h').data[itrack,:idur]
         ibt_end = np.nanmax(ibt)
         
         # Compute time difference between current pixel-level data time and the end time of the track

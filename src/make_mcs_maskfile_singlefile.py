@@ -31,7 +31,7 @@ def subset_vars(infiles):
     # Update time attributes
     ds['time'].attrs['long_name'] = 'Time'
     # Round down the time to the nearest hour
-    t_coord_new = ds['time'].dt.floor('H')
+    t_coord_new = ds['time'].dt.floor('h')
     # Update time coordinate
     ds = ds.assign_coords({'time':t_coord_new})
 

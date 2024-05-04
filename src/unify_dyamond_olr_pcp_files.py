@@ -51,8 +51,8 @@ def harmonize_file(filename):
     # Change time coordinate encoding
     ds[time_coordname].encoding['units'] = f'hours since {start_datetime}'
     # Round down the time to the nearest hour
-    # t_coord_new = ds[time_coordname].dt.floor('H')
-    t_coord_new = ds[time_coordname].dt.round('H')
+    # t_coord_new = ds[time_coordname].dt.floor('h')
+    t_coord_new = ds[time_coordname].dt.round('h')
     # Replace the lat/lon coordinates
     ds = ds.assign_coords({time_coordname:t_coord_new, x_coordname:lon_ref, y_coordname:lat_ref})
     # Rename dimensions

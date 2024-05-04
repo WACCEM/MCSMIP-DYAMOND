@@ -871,10 +871,6 @@ if __name__ == "__main__":
         # Trigger dask computation
         final_result = dask.compute(*results)
         wait(final_result)
-
-        # Close the Dask cluster
-        client.close()
-        cluster.close()
     else:
         sys.exit('Valid parallelization flag not provided.')
 
@@ -984,3 +980,8 @@ if __name__ == "__main__":
                     format="NETCDF4", unlimited_dims=tracks_dimname, encoding=encoding)
     print(f"{out_filename}")
     print(f'End time: {time.ctime(time.time())}')
+
+    # # Close the Dask cluster
+    # if run_parallel == 1:
+    #     client.close()
+    #     cluster.close()

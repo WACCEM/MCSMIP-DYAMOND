@@ -43,25 +43,25 @@ if __name__ == "__main__":
         end_date = '2016-08-15T00'
     elif PHASE == 'Winter':
          # Domain extent (lonmin, lonmax, latmin, latmax)
-        region = 'IO'
-        extent = [55.0, 95.0, -20.0, 0.0]
+        # region = 'IO'
+        # extent = [55.0, 95.0, -20.0, 0.0]
 
-        # region = 'AMZ'
-        # extent = [-75, -35, -20.0, 0.0]
+        region = 'AMZ'
+        extent = [-75, -35, -20.0, 0.0]
 
         start_date = '2020-02-01T00'
         end_date = '2020-02-06T00'
 
     # Tracker names
-    # Trackers = ['PyFLEXTRKR']
-    Trackers = [
-        'PyFLEXTRKR',
-        'MOAAP',
-        'TOOCAN',
-        'tobac',
-        'TAMS',
-        'simpleTrack',
-    ]        
+    Trackers = ['MOAAP']
+    # Trackers = [
+    #     'PyFLEXTRKR',
+    #     'MOAAP',
+    #     'TOOCAN',
+    #     'tobac',
+    #     'TAMS',
+    #     'simpleTrack',
+    # ]        
 
     # Model names
     if (PHASE == 'Summer'):
@@ -73,8 +73,10 @@ if __name__ == "__main__":
             'MPAS',
             'NICAM',
             'OBS',
+            'OBSv7',
             'SAM',
             'UM',
+            'SCREAMv1',
         ]
     elif (PHASE == 'Winter'):
         # runnames = ['OBSv7', 'SCREAMv1']
@@ -87,8 +89,10 @@ if __name__ == "__main__":
             'MPAS',
             # 'NICAM',
             'OBS',
+            'OBSv7',
             'SAM',
             'SCREAM',
+            'SCREAMv1',
             'UM',
             'XSHiELD',
         ]

@@ -38,38 +38,41 @@ else
 fi
 
 # Config file
-config_dir=/global/homes/f/feng045/program/pyflex_config/config/
+# config_dir=/global/homes/f/feng045/program/pyflex_config/config/
+config_dir=/global/homes/f/feng045/program/mcsmip/dyamond/config/
 config_basename=config_dyamond_
 config_file=${config_dir}${config_basename}${PHASE}_${runname}.yml
+echo ${config_file}
 
-# Unify Tb/OLR-precipitation data
-python unify_dyamond_olr_pcp_files.py ${config_file} ${PHASE} ${runname}
+# # Unify Tb/OLR-precipitation data
+# python unify_dyamond_olr_pcp_files.py ${config_file} ${PHASE} ${runname}
 
-# Combine hourly Tb/OLR-precipitation files to a single file using ncks
-# This step may need to be run separately on the command line
-# Activate E3SM unified environment
-source deactivate
-source /global/common/software/e3sm/anaconda_envs/load_latest_e3sm_unified_pm-cpu.sh
-echo 'Combining unified Tb/OLR-precipitation to a single file ...'
-ncrcat -h olr_pcp_*.nc olr_pcp_${PHASE}_${runname}.nc
-which ncks
-source deactivate
-source activate /global/common/software/m1867/python/pyflex
+# # Combine hourly Tb/OLR-precipitation files to a single file using ncks
+# # This step may need to be run separately on the command line
+# # Activate E3SM unified environment
+# source deactivate
+# source /global/common/software/e3sm/anaconda_envs/load_latest_e3sm_unified_pm-cpu.sh
+# echo 'Combining unified Tb/OLR-precipitation to a single file ...'
+# ncrcat -h olr_pcp_*.nc olr_pcp_${PHASE}_${runname}.nc
+# which ncks
+# source deactivate
+# source activate /global/common/software/m1867/python/pyflex
 
-# MCS
+# # MCS
 if [[ ${tracker} == 'PyFLEXTRKR' ]]
 then
     python make_mcs_maskfile_singlefile.py ${PHASE} ${runname}
 else
     python unify_mask_files.py ${PHASE} ${runname} ${tracker}
 fi
+python calc_tbpf_mcs_rainmap_mcsmip.py ${config_file} ${tracker} ${start_date} ${end_date}
 python make_mcs_stats_from_maskfile.py ${config_file} ${tracker}
 python avg_global_rain_timeseries.py ${PHASE} ${runname}
-python calc_tbpf_mcs_rainmap_mcsmip.py ${config_file} ${tracker} ${start_date} ${end_date}
 python calc_tb_rainrate_pdf_byregion.py ${PHASE} ${runname} ${tracker}
 
 # Environments
 python unify_env_files.py ${PHASE} ${runname} ${env_varname}
+python avg_global_env_map_timeseries.py ${PHASE} ${runname} ${env_varname} ${start_date} ${end_date}
 python extract_mcs_2d_env.py ${PHASE} ${runname} ${tracker} ${env_varname}
 python avg_mcs_track_env_space.py ${PHASE} ${runname} ${tracker} ${env_varname}
 python regrid_envs2era5.py ${PHASE} ${runname} ${env_varname}

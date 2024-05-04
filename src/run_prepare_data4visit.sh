@@ -24,6 +24,7 @@ then
         'MPAS'
         'NICAM'
         'OBS'
+        'OBSv7'
         'SAM'
         'UM'
     )

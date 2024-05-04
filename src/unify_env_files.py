@@ -68,7 +68,7 @@ if __name__ == "__main__":
     ds['time'].encoding['units'] = f'hours since {start_datetime}'
 
     # Round down the time coordinates to the nearest hour
-    ds['time'] = ds['time'].dt.floor('H')
+    ds['time'] = ds['time'].dt.floor('h')
     # import pdb; pdb.set_trace()
     
     # Replace the coordinates

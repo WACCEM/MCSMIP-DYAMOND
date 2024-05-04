@@ -33,7 +33,7 @@ NICAM:
   ycoord_name: 'lat'
   intqv: 'sa_vap_atm'
 SAM:
-  filename_intqv: 'SAM_PW_0.1deg_-60_60_hourmean.nc'
+  filename_intqv: 'SAM_1hr_PW_0.10deg.nc'
   xcoord_name: 'lon'
   ycoord_name: 'lat'
   intqv: 'PW'
