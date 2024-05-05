@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
     # Drop variables
     if tracker == 'tobac':
-        coordinates_to_drop = ['feature', 'cell', 'track']
+        coordinates_to_drop = ['feature', 'cell', 'track', 'cluster']
         variables_to_drop = ['all_feature_labels', 'mcs_feature_labels', 'all_cell_labels', 'mcs_cell_labels']
     elif tracker == 'TAMS':
         coordinates_to_drop = ['mcs_id']

@@ -35,19 +35,19 @@ if __name__ == "__main__":
         
     elif PHASE == 'Winter':
         # Domain extent (lonmin, lonmax, latmin, latmax)
-        # region = 'IO'
-        # extent = [55.0, 95.0, -20.0, 0.0]
-        # start_date = '2020-02-01T00'
-        # end_date = '2020-02-02T00'
+        region = 'IO'
+        extent = [55.0, 95.0, -20.0, 0.0]
+        start_date = '2020-02-01T00'
+        end_date = '2020-02-02T00'
 
-        region = 'AMZ'
-        extent = [-75, -35, -20.0, 0.0]
-        start_date = '2020-02-03T12'
-        end_date = '2020-02-04T13'
+        # region = 'AMZ'
+        # extent = [-75, -35, -20.0, 0.0]
+        # start_date = '2020-02-03T12'
+        # end_date = '2020-02-04T13'
 
 
     # Tracker names
-    Trackers = ['MOAAP']
+    Trackers = ['tobac']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',

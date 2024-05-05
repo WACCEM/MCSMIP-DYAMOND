@@ -651,8 +651,8 @@ if __name__ == "__main__":
     # Check time encoding from the mask file
     time_encoding = ds['time'].encoding.get('calendar', None)
     # Convert 'noleap' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
-    if time_encoding == 'noleap':
-        time_DatetimeIndex = xr.cftime_range(start=ds['time'].values[0], periods=ntimes, freq='1H', calendar='noleap').to_datetimeindex()
+    if (time_encoding == '365_day') | (time_encoding == 'noleap'):
+        time_DatetimeIndex = xr.cftime_range(start=ds['time'].values[0], periods=ntimes, freq='1h', calendar='noleap').to_datetimeindex()
         # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
         time_mcs_mask = xr.DataArray(time_DatetimeIndex, coords={'time': time_DatetimeIndex}, dims='time')
         ds['time'] = time_mcs_mask

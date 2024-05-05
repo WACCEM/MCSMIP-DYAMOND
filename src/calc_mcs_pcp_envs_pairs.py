@@ -85,13 +85,16 @@ if __name__ == "__main__":
 
     # Convert 'noleap'/'365_day' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
     ds_p = xr.open_dataset(pcp_file)
-    if (ds_p['time'].encoding.get('calendar') == '365_day'):
+    ds_p_calendar = ds_p['time'].encoding.get('calendar')
+    if (ds_p_calendar == '365_day') | (ds_p_calendar == 'noleap'):
         ds_p = convert_calendar(ds_p, 'noleap')
     ds_m = xr.open_dataset(mask_file)
-    if (ds_m['time'].encoding.get('calendar') == '365_day'):        
+    ds_m_calendar = ds_m['time'].encoding.get('calendar')
+    if (ds_m_calendar == '365_day') | (ds_m_calendar == 'noleap'):        
         ds_m = convert_calendar(ds_m, 'noleap')
     ds_e = xr.open_dataset(env_file)
-    if (ds_e['time'].encoding.get('calendar') == '365_day'):        
+    ds_e_calendar = ds_e['time'].encoding.get('calendar')
+    if (ds_e_calendar == '365_day') | (ds_e_calendar == 'noleap'):        
         ds_e = convert_calendar(ds_e, 'noleap')
 
     # Read precipitation file

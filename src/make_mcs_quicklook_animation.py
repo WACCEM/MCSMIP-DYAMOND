@@ -26,6 +26,7 @@ if __name__ == "__main__":
     code_dir = './'
     code_name = f'{code_dir}plot_subset_tbpf_mcs_tracks_1panel_mcsmip.py'
     fig_dir = '/global/cfs/cdirs/m1867/zfeng/MCSMIP/DYAMOND/'
+    # fig_dir = '/pscratch/sd/f/feng045/DYAMOND/'
     out_dir_mp4 = f'{fig_dir}{PHASE}/quicklooks/animations/'
 
     os.makedirs(out_dir_mp4, exist_ok=True)
@@ -43,17 +44,17 @@ if __name__ == "__main__":
         end_date = '2016-08-15T00'
     elif PHASE == 'Winter':
          # Domain extent (lonmin, lonmax, latmin, latmax)
-        # region = 'IO'
-        # extent = [55.0, 95.0, -20.0, 0.0]
+        region = 'IO'
+        extent = [55.0, 95.0, -20.0, 0.0]
 
-        region = 'AMZ'
-        extent = [-75, -35, -20.0, 0.0]
+        # region = 'AMZ'
+        # extent = [-75, -35, -20.0, 0.0]
 
         start_date = '2020-02-01T00'
         end_date = '2020-02-06T00'
 
     # Tracker names
-    Trackers = ['MOAAP']
+    Trackers = ['tobac']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',
@@ -65,7 +66,7 @@ if __name__ == "__main__":
 
     # Model names
     if (PHASE == 'Summer'):
-        # runnames = ['OBSv7', 'SCREAMv1']
+        # runnames = ['OBS']
         runnames = [
             'ARPEGE',
             'FV3',
