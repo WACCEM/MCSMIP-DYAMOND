@@ -15,12 +15,28 @@ if __name__ == "__main__":
     tracker = sys.argv[2]
     
     # Submit slurm job
-    submit_job = False
+    submit_job = True
 
     # Environmental variable name
     env_varname = 'intqv'
 
     code_dir = '/global/homes/f/feng045/program/mcsmip/dyamond/src/'
+    # code_func = 'unify_dyamond_olr_pcp_files'
+    code_func = 'unify_mask_files'
+    # code_func = 'unify_env_files'
+    # code_func = 'avg_global_env_map_timeseries'
+    # code_func = 'avg_global_rain_timeseries'
+    # code_func = 'make_mcs_maskfile_singlefile'
+    # code_func = 'calc_tbpf_mcs_rainmap_mcsmip'
+    # code_func = 'make_mcs_stats_from_maskfile'
+    # code_func = 'extract_mcs_2d_env'
+    # code_func = 'avg_mcs_track_env_space'
+    # code_func = 'calc_tb_rainrate_pdf_byregion'
+    # code_func = 'regrid_tbpcp2era5'
+    # code_func = 'regrid_envs2era5'
+    # code_func = 'regrid_mcsmask2era5'
+    # code_func = 'calc_mcs_pcp_envs_pairs'
+
     # slurm_dir = code_dir
     # code_name = f'{code_dir}unify_dyamond_olr_pcp_files.py'
     # code_name = f'{code_dir}unify_mask_files.py'
@@ -36,8 +52,10 @@ if __name__ == "__main__":
     # code_name = f'{code_dir}regrid_tbpcp2era5.py'
     # code_name = f'{code_dir}regrid_envs2era5.py'
     # code_name = f'{code_dir}regrid_mcsmask2era5.py'
-    code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
+    # code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
     # config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
+    
+    code_name = f'{code_dir}{code_func}.py'
     config_dir = '/global/homes/f/feng045/program/mcsmip/dyamond/config/'
     config_basename = f'config_dyamond_'
     slurm_basename = f'slurm_dyamond_'
@@ -121,7 +139,7 @@ if __name__ == "__main__":
         print(f'Unknown PHASE: {PHASE}') 
 
     # Create the list of job tasks needed by SLURM...
-    task_filename = f'tasks_mcsmip_{PHASE}_{tracker}.txt'
+    task_filename = f'tasks_mcsmip_{PHASE}_{tracker}_{code_func}.txt'
     task_file = open(task_filename, "w")
     ntasks = 0
 
@@ -167,7 +185,7 @@ if __name__ == "__main__":
 
 
     # Create a SLURM submission script for the above task list...
-    slurm_filename = f'{slurm_basename}{phase}_{tracker}.sh'
+    slurm_filename = f'{slurm_basename}{phase}_{tracker}_{code_func}.sh'
     slurm_file = open(slurm_filename, "w")
     text = f"""\
         #!/bin/bash

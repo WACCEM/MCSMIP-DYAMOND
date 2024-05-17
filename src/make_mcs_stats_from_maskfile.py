@@ -610,7 +610,8 @@ if __name__ == "__main__":
     n_workers = 128
 
     # Number of times for the MCS track stats file
-    ntimes_out = 600
+    # ntimes_out = 600
+    ntimes_out = 1000
 
     mask_varname = 'mcs_mask'
     # mask_varname = 'mcs_mask_no_mergesplit'
@@ -725,17 +726,23 @@ if __name__ == "__main__":
         # Find time indices for the track
         # tidx_tracknum = find_track_time_indices(list_mcs, tracknum)
         tidx_tracknum = np.where(np.array([tracknum in sublist for sublist in list_mcs_np]))[0]
+        # Duration of track
+        duration_track = len(tidx_tracknum)
         # import pdb; pdb.set_trace()
-        # if tidx_tracknum:
-        if len(tidx_tracknum) > 0:
-            print(f'Track {ii}, duration: {len(tidx_tracknum)}')
-            # base_times[ii, :len(tidx_tracknum)] = time_mcs_mask.isel(time=tidx_tracknum).data
-            base_times[ii, :len(tidx_tracknum)] = list_mcs_times[tidx_tracknum]
+        if duration_track > 0:
+            print(f'Track {ii}, duration: {duration_track}')
+            if duration_track < ntimes_out:
+                base_times[ii, :duration_track] = list_mcs_times[tidx_tracknum]
 
-            # Convert time values to hours since the reference time
-            itime = list_mcs_times[tidx_tracknum]
-            hours_since_reference = (itime - reference_time) / np.timedelta64(1, 'h')
-            mcs_times[ii, :len(tidx_tracknum)] = hours_since_reference.astype(int).data
+                # Convert time values to hours since the reference time
+                itime = list_mcs_times[tidx_tracknum]
+                hours_since_reference = (itime - reference_time) / np.timedelta64(1, 'h')
+                mcs_times[ii, :duration_track] = hours_since_reference.astype(int).data
+            else:
+                print(f'ERROR: Track {ii}, duration > ntimes_out ({ntimes_out})')
+                print(f'Increase ntimes_out to be larger than the max duration. Code will exit now.')
+                sys.exit()
+
 
     # Get track duration, start/end time
     mcs_exist = mcs_times > 0

@@ -72,8 +72,8 @@ if __name__ == "__main__":
     print(f'Reading MCS mask file: {mask_file}')
     dsm = xr.open_dataset(mask_file, mask_and_scale=False)
     # Convert CFTimeIndex to Pandas DatetimeInex
-    # if dsm['time'].encoding.get('calendar') == 'noleap':
-    if dsm['time'].encoding.get('calendar') == '365_day':
+    dsm_calendar = dsm['time'].encoding.get('calendar')
+    if (dsm_calendar == '365_day') | (dsm_calendar == 'noleap'):
         dsm_datetimeindex = dsm.indexes['time'].to_datetimeindex()
         # Replace the original time coordinate
         dsm = dsm.assign_coords({'time': dsm_datetimeindex})

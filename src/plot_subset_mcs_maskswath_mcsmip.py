@@ -385,7 +385,10 @@ def plot_map(plot_data, map_info, plot_info, figname=None, figtype=None):
     # Set up mask colors
     cmap_m = plt.get_cmap(cmap_mask)
     # Set up color levels
-    levels = np.arange(1, ntracks_pix+1, 1)
+    if ntracks_pix > 1:
+        levels = np.arange(1, ntracks_pix+1, 1)
+    else:
+        levels = np.arange(1, ntracks_pix+2, 1)
     # Normalize the color map
     norm = mpl.colors.BoundaryNorm(levels, ncolors=cmap_m.N, clip=False)
     # Get the color for each level (for track line plots)

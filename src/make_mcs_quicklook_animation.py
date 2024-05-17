@@ -34,14 +34,15 @@ if __name__ == "__main__":
     # DYAMOND phase start date
     if PHASE == 'Summer':
         # Domain extent (lonmin, lonmax, latmin, latmax)
-        region = 'AFC'
-        extent = [-5.0, 35.0, 0.0, 20.0]
+        region = 'WPAC'
+        extent = [125.0, 165.0, 10.0, 30.0]
 
-        # region = 'WPAC'
-        # extent = [125.0, 165.0, 10.0, 30.0]
+        # region = 'AFC'
+        # extent = [-5.0, 35.0, 0.0, 20.0]
 
         start_date = '2016-08-10T00'
         end_date = '2016-08-15T00'
+        
     elif PHASE == 'Winter':
          # Domain extent (lonmin, lonmax, latmin, latmax)
         region = 'IO'
@@ -54,7 +55,7 @@ if __name__ == "__main__":
         end_date = '2020-02-06T00'
 
     # Tracker names
-    Trackers = ['tobac']
+    Trackers = ['DL']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',
@@ -62,6 +63,7 @@ if __name__ == "__main__":
     #     'tobac',
     #     'TAMS',
     #     'simpleTrack',
+    #      'DL',
     # ]        
 
     # Model names
