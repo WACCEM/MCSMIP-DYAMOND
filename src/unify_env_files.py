@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # Config file contains input filenames for each model & environmental variable names
     config_file = f'/global/homes/f/feng045/program/mcsmip/dyamond/src/config_env_files_{PHASE}.yml'
 
-    in_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/{varname}/'
+    in_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs_orig/'
     out_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs/'
     out_filename = f'{out_dir}{PHASE}_{runname}_{varname}.nc'
     os.makedirs(out_dir, exist_ok=True)

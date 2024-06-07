@@ -54,6 +54,15 @@ if __name__ == "__main__":
     # Config file contains input filenames for each model & environmental variable names
     # config_file = f'/global/homes/f/feng045/program/mcsmip/dyamond/src/config_env_files_{PHASE}.yml'
 
+    # Landmask file
+    lm_dir = '/pscratch/sd/f/feng045/DYAMOND/maps/'
+    if ('OBS' in runname):
+        lm_file = f'{lm_dir}era5_landmask.nc'
+        ocean_range = [0, 0.01]
+    else:
+        lm_file = f'{lm_dir}IMERG_landmask_180W-180E_60S-60N.nc'
+        ocean_range = [99, 100]
+
     # Inputs
     env_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs/'
     env_file = f"{env_dir}{PHASE}_{runname}_{varname}.nc"
@@ -76,6 +85,10 @@ if __name__ == "__main__":
     # stream = open(config_file, 'r')
     # config = yaml.full_load(stream)
 
+    # Read landmask data
+    dslm = xr.open_dataset(lm_file)
+    landseamask = dslm['landseamask'].squeeze()
+
     # Read input data
     ds = xr.open_dataset(env_file)
     ntimes = ds.sizes['time']
@@ -88,10 +101,19 @@ if __name__ == "__main__":
     # Convert 'noleap'/'365_day' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
     if (ds['time'].encoding.get('calendar')  == '365_day'):        
         ds = convert_calendar(ds, 'noleap')
-    # import pdb; pdb.set_trace()
 
     # Average within specified region to get time series
     print(f'Calculating spatial average ...')
+
+    # Make a mask for ocean
+    mask_ocean = (landseamask >= min(ocean_range)) & (landseamask <= max(ocean_range))
+    # mask_land = mask_ocean == False
+    VAR_o = ds[varname].where(mask_ocean)
+    VAR_o_avg_timeseries = VAR_o.sel(
+        lon=slice(lon_bounds[0], lon_bounds[1]), 
+        lat=slice(lat_bounds[0], lat_bounds[1]),
+    ).mean(dim=('lon', 'lat'), keep_attrs=True)
+
     VAR_avg_timeseries = ds[varname].sel(
         lon=slice(lon_bounds[0], lon_bounds[1]), 
         lat=slice(lat_bounds[0], lat_bounds[1]),
@@ -100,13 +122,15 @@ if __name__ == "__main__":
     # Average between specified time period
     print(f'Calculating temporal average ...')
     VAR_avg_map = ds[varname].sel(time=slice(start_date, end_date)).mean(dim='time', keep_attrs=True)
-    # VAR_avg_map = ds[varname].sel(time=slice(datetime_range[0], datetime_range[1])).mean(dim='time', keep_attrs=True)
+    VAR_o_avg_map = VAR_o.sel(time=slice(start_date, end_date)).mean(dim='time', keep_attrs=True)
+    # import pdb; pdb.set_trace()
 
     #-------------------------------------------------------------------------
     # Write output time series file
     #-------------------------------------------------------------------------
     var_dict = {
         varname: (['time'], VAR_avg_timeseries.data),
+        f'{varname}_ocean': (['time'], VAR_o_avg_timeseries.data),
     }
     coord_dict = {
         'time': (['time'], ds['time'].data),
@@ -132,6 +156,7 @@ if __name__ == "__main__":
     #-------------------------------------------------------------------------
     var_dict = {
         varname: (['lat', 'lon'], VAR_avg_map.data),
+        f'{varname}_ocean': (['lat', 'lon'], VAR_o_avg_map.data),
     }
     coord_dict = {
         # 'time': (['time'], ds['time'].data),

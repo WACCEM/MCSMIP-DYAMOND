@@ -34,28 +34,28 @@ if __name__ == "__main__":
     # DYAMOND phase start date
     if PHASE == 'Summer':
         # Domain extent (lonmin, lonmax, latmin, latmax)
-        region = 'WPAC'
-        extent = [125.0, 165.0, 10.0, 30.0]
+        # region = 'WPAC'
+        # extent = [125.0, 165.0, 10.0, 30.0]
 
-        # region = 'AFC'
-        # extent = [-5.0, 35.0, 0.0, 20.0]
+        region = 'AFC'
+        extent = [-5.0, 35.0, 0.0, 20.0]
 
         start_date = '2016-08-10T00'
         end_date = '2016-08-15T00'
         
     elif PHASE == 'Winter':
          # Domain extent (lonmin, lonmax, latmin, latmax)
-        region = 'IO'
-        extent = [55.0, 95.0, -20.0, 0.0]
+        # region = 'IO'
+        # extent = [55.0, 95.0, -20.0, 0.0]
 
-        # region = 'AMZ'
-        # extent = [-75, -35, -20.0, 0.0]
+        region = 'AMZ'
+        extent = [-75, -35, -20.0, 0.0]
 
         start_date = '2020-02-01T00'
         end_date = '2020-02-06T00'
 
     # Tracker names
-    Trackers = ['DL']
+    Trackers = ['ATRACKCS']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',
@@ -63,24 +63,25 @@ if __name__ == "__main__":
     #     'tobac',
     #     'TAMS',
     #     'simpleTrack',
-    #      'DL',
+    #     'DL',
+    #     'KFyAO',
     # ]        
 
     # Model names
     if (PHASE == 'Summer'):
-        # runnames = ['OBS']
-        runnames = [
-            'ARPEGE',
-            'FV3',
-            'IFS',
-            'MPAS',
-            'NICAM',
-            'OBS',
-            'OBSv7',
-            'SAM',
-            'UM',
-            'SCREAMv1',
-        ]
+        runnames = ['OBS']
+        # runnames = [
+        #     'ARPEGE',
+        #     'FV3',
+        #     'IFS',
+        #     'MPAS',
+        #     'NICAM',
+        #     'OBS',
+        #     'OBSv7',
+        #     'SAM',
+        #     'UM',
+        #     'SCREAMv1',
+        # ]
     elif (PHASE == 'Winter'):
         # runnames = ['OBSv7', 'SCREAMv1']
         runnames = [

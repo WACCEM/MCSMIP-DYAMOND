@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     code_dir = '/global/homes/f/feng045/program/mcsmip/dyamond/src/'
     # code_func = 'unify_dyamond_olr_pcp_files'
-    code_func = 'unify_mask_files'
+    # code_func = 'unify_mask_files'
     # code_func = 'unify_env_files'
     # code_func = 'avg_global_env_map_timeseries'
     # code_func = 'avg_global_rain_timeseries'
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # code_func = 'make_mcs_stats_from_maskfile'
     # code_func = 'extract_mcs_2d_env'
     # code_func = 'avg_mcs_track_env_space'
-    # code_func = 'calc_tb_rainrate_pdf_byregion'
+    code_func = 'calc_tb_rainrate_pdf_byregion'
     # code_func = 'regrid_tbpcp2era5'
     # code_func = 'regrid_envs2era5'
     # code_func = 'regrid_mcsmask2era5'
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         elif 'avg_global_rain_timeseries' in code_name:
             cmd = f'python {code_name} {PHASE} {run}'
         elif 'calc_tb_rainrate_pdf_byregion' in code_name:
-            cmd = f'python {code_name} {PHASE} {run} {tracker}'
+            cmd = f'python {code_name} {PHASE} {run} {tracker} {start_date} {end_date}'
         elif 'regrid_tbpcp2era5' in code_name:
             cmd = f'python {code_name} {PHASE} {run}'
         elif 'regrid_mcsmask2era5' in code_name:

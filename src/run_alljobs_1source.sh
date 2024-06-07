@@ -67,8 +67,8 @@ else
 fi
 python calc_tbpf_mcs_rainmap_mcsmip.py ${config_file} ${tracker} ${start_date} ${end_date}
 python make_mcs_stats_from_maskfile.py ${config_file} ${tracker}
-python avg_global_rain_timeseries.py ${PHASE} ${runname}
-python calc_tb_rainrate_pdf_byregion.py ${PHASE} ${runname} ${tracker}
+# python avg_global_rain_timeseries.py ${PHASE} ${runname}
+# python calc_tb_rainrate_pdf_byregion.py ${PHASE} ${runname} ${tracker}
 
 # Environments
 # python unify_env_files.py ${PHASE} ${runname} ${env_varname}

@@ -1,11 +1,15 @@
 ---
 ARPEGE:
   filename_intqv: 'prw_1hr_ARPEGE-NH-2km_20200120-20200228_60S-60N.nc'
+  filename_t2m: 'tas_15min_ARPEGE-NH-2km__20200120-20200228_60S-60N.nc'
   filename_cape: ''
   xcoord_name: 'lon'
   ycoord_name: 'lat'
   intqv: 'prw'
   cape: ''
+  t2m: 'tas'
+  q2m: 'hus'
+  ps: 'ps'
 GEOS:
   filename_intqv: 'prvvi_15min_GEOS-3km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60N.nc'
   filename_cape: ''
@@ -55,9 +59,21 @@ SCREAM:
   intqv: 'qvi'
 SCREAMv1:
   filename_intqv: 'tcwv_scream_winter.nc'
+  filename_t2m: 'T_2m_1hr_20200120-20200228_60S-60N.nc'
+  filename_q2m: 'qv_2m_1hr_20200120-20200228_60S-60N.nc'
+  filename_ps: 'ps_1hr_20200120-20200228_60S-60N.nc'
+  filename_lhx: 'surf_evap_1hr_20200120-20200228_60S-60N.nc'
+  filename_shx: 'surf_sens_flux_1hr_20200120-20200228_60S-60N.nc'
+  filename_wspd10m: 'wind_speed_10m_1hr_20200120-20200228_60S-60N.nc'
   xcoord_name: 'lon'
   ycoord_name: 'lat'
   intqv: 'VapWaterPath'
+  t2m: 'T_2m'
+  q2m: 'qv_2m'
+  ps: 'ps'
+  lhx: 'surf_evap'
+  shx: 'surf_sens_flux'
+  wspd10m: 'wind_speed_10m'
 UM:
   filename_intqv: 'prw_UM-5km_DW-ATM_r1i1p1f1_2d_gn_20200120-20200228_60S-60n.nc'
   filename_cape: ''

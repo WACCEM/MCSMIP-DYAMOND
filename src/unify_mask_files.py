@@ -56,6 +56,14 @@ if __name__ == "__main__":
         mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}.nc'
         xcoord_name = 'lon'
         ycoord_name = 'lat'
+    elif tracker == 'DL':
+        mask_file = f'{in_dir}MCSMIP_{PHASE}_DL_{runname}.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
+    elif tracker == 'ATRACKCS':
+        mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}_ATRACKCSv2.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
     else:
         print(f'ERROR: {tracker} file format is undefined.')
         print(f'Code will exist now.')
@@ -124,7 +132,8 @@ if __name__ == "__main__":
     #     dsout = ds.drop_vars([xcoord_name, ycoord_name])
     # else:
     #     dsout = ds
-    if (tracker == 'TOOCAN') | (tracker == 'tobac') | (tracker == 'TAMS') | (tracker == 'simpleTrack') | (tracker == 'KFyAO'):
+    if (tracker == 'TOOCAN') | (tracker == 'tobac') | (tracker == 'TAMS') | (tracker == 'simpleTrack') | \
+        (tracker == 'KFyAO') | (tracker == 'DL') | (tracker == 'ATRACKCS'):
         dsout = ds
     else:
         dsout = ds.drop_vars([xcoord_name, ycoord_name])
@@ -150,6 +159,8 @@ if __name__ == "__main__":
     # Rename variables
     if tracker == 'tobac':
         dsout = dsout.rename({'mcs_track_labels':'mcs_mask'})
+    if tracker == 'DL':
+        dsout = dsout.rename({'MCS_mcs_prob':'mcs_mask'})
 
     # Convert mcs_mask data type to int
     if dsout['mcs_mask'].dtype != int:

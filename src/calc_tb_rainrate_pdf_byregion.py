@@ -37,8 +37,8 @@ if __name__ == "__main__":
     PHASE = sys.argv[1]
     runname = sys.argv[2]
     tracker = sys.argv[3]
-    # start_date = sys.argv[3]
-    # end_date = sys.argv[4]
+    start_date = sys.argv[4]
+    end_date = sys.argv[5]
 
     # Inputs
     tb_varname = 'Tb'
@@ -49,6 +49,7 @@ if __name__ == "__main__":
     mask_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_mask/{PHASE}/{tracker}/'
     rain_file = f'{pcp_dir}olr_pcp_{PHASE}_{runname}.nc'
     mask_file = f'{mask_dir}mcs_mask_{PHASE}_{runname}.nc'
+    file_landmask = f'/pscratch/sd/f/feng045/DYAMOND/maps/IMERG_landmask_180W-180E_60S-60N.nc'
     # Outputs 
     out_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_stats/{PHASE}/{tracker}/'
     out_filename = f'{out_dir}tb_rainrate_hist_{PHASE}_{runname}.nc'
@@ -62,6 +63,14 @@ if __name__ == "__main__":
         # datetime_range = pd.to_datetime([start_date, end_date])
         lon_bounds = [-180, 180]
         lat_bounds = [-20, 15]
+
+    # Ocean vs. Land threshold (%)
+    ocean_thresh = 99
+    land_thresh = 20
+
+    # Read landmask data
+    dslm = xr.open_dataset(file_landmask)
+    landseamask = dslm['landseamask']
 
     # Read precipitation data
     dsr = xr.open_dataset(rain_file)
@@ -93,6 +102,7 @@ if __name__ == "__main__":
     ds = xr.merge([dsr, dsm], compat='no_conflicts').sel(
         lon=slice(lon_bounds[0], lon_bounds[1]), 
         lat=slice(lat_bounds[0], lat_bounds[1]),
+        time=slice(start_date, end_date),
     )
     print(f'Finished combining two datasets.')
 
@@ -131,6 +141,12 @@ if __name__ == "__main__":
     print(f'Computing MCS precipitation histogram ...')
     mcspcp = ds['precipitation'].where(ds['mcs_mask'] > 0)
     mcspcp_hist, bins = np.histogram(mcspcp, bins=bins_pcp, range=pcp_range, density=False)
+
+    # MCS precipitation (ocean vs. land)
+    mcspcp_o = ds['precipitation'].where((ds['mcs_mask'] > 0) & (landseamask >= ocean_thresh))
+    mcspcp_l = ds['precipitation'].where((ds['mcs_mask'] > 0) & (landseamask <= land_thresh))
+    mcspcp_o_hist, bins = np.histogram(mcspcp_o, bins=bins_pcp, range=pcp_range, density=False)
+    mcspcp_l_hist, bins = np.histogram(mcspcp_l, bins=bins_pcp, range=pcp_range, density=False)
     # import pdb; pdb.set_trace()
 
 
@@ -146,13 +162,17 @@ if __name__ == "__main__":
     tb_attrs = {'long_name': 'Tb histogram', 'units':'count'}
     totpcp_attrs = {'long_name': 'Total precipitation histogram', 'units':'count'}
     mcspcp_attrs = {'long_name': 'MCS precipitation histogram', 'units':'count'}
+    mcspcp_o_attrs = {'long_name': 'Ocean MCS precipitation histogram', 'units':'count'}
+    mcspcp_l_attrs = {'long_name': 'Land MCS precipitation histogram', 'units':'count'}
 
     var_dict = {
         'olr': (['bins_olr'], olr_hist, olr_attrs),
         'tb': (['bins_tb'], tb_hist, tb_attrs),
         'total_pcp': (['bins_pcp'], totpcp_hist, totpcp_attrs),
         'mcs_pcp': (['bins_pcp'], mcspcp_hist, mcspcp_attrs),
-        'mcs_tb': (['bins_tb'], mcstb_hist, tb_attrs)
+        'mcs_tb': (['bins_tb'], mcstb_hist, tb_attrs),
+        'mcs_pcp_o': (['bins_pcp'], mcspcp_o_hist, mcspcp_o_attrs),
+        'mcs_pcp_l': (['bins_pcp'], mcspcp_l_hist, mcspcp_l_attrs),
     }
     coord_dict = {
         'bins_olr': (['bins_olr'], bins_olr[:-1], bins_olr_attrs),
@@ -163,6 +183,10 @@ if __name__ == "__main__":
         'title': 'OLR, Tb, precipitation histogram',
         'lon_bounds': lon_bounds,
         'lat_bounds': lat_bounds,
+        'start_date': start_date,
+        'end_date': end_date,
+        'ocean_thresh': ocean_thresh,
+        'land_thresh': land_thresh,
         'tracker': tracker,
         'contact':'Zhe Feng, zhe.feng@pnnl.gov',
         'created_on':time.ctime(time.time()),

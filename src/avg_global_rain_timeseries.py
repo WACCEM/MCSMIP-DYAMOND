@@ -47,8 +47,10 @@ if __name__ == "__main__":
     tracker = 'PyFLEXTRKR'
     pcp_dir = f'/pscratch/sd/f/feng045/DYAMOND/OLR_Precipitation_combined/'
     mask_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_mask/{PHASE}/{tracker}/'
+    lm_dir = '/pscratch/sd/f/feng045/DYAMOND/maps/'
     rain_file = f'{pcp_dir}olr_pcp_{PHASE}_{runname}.nc'
     mask_file = f'{mask_dir}mcs_mask_{PHASE}_{runname}.nc'
+    lm_file = f'{lm_dir}IMERG_landmask_180W-180E_60S-60N.nc'
     # Outputs 
     out_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs/'
     out_filename_timeseries = f'{out_dir}{PHASE}_{runname}_rain_timeseries.nc'
@@ -63,6 +65,13 @@ if __name__ == "__main__":
         # datetime_range = pd.to_datetime([start_date, end_date])
         lon_bounds = [-180, 180]
         lat_bounds = [-20, 15]
+
+    # Ocean landseamask range
+    ocean_range = [99, 100]
+
+    # Read landmask data
+    dslm = xr.open_dataset(lm_file)
+    landseamask = dslm['landseamask'].squeeze()
 
     # Read precipitation data
     dsr = xr.open_dataset(rain_file)
@@ -93,11 +102,30 @@ if __name__ == "__main__":
     nx = lon_sub.sizes['lon']
     ngrids = nx * ny
 
+    # Make a mask for ocean
+    mask_ocean = (landseamask >= min(ocean_range)) & (landseamask <= max(ocean_range))
+    # Count the number of grids over ocean
+    ngrids_o = mask_ocean.sel(
+        lon=slice(lon_bounds[0], lon_bounds[1]), 
+        lat=slice(lat_bounds[0], lat_bounds[1]),
+    ).sum().values
+
+    # Oceanic precipitation
+    totprecip_o = ds['precipitation'].where(mask_ocean).sel(
+        lon=slice(lon_bounds[0], lon_bounds[1]), 
+        lat=slice(lat_bounds[0], lat_bounds[1]),
+    ).sum(dim=('lat', 'lon')) / ngrids_o
+    # mcsprecip_o = ds['precipitation'].where((ds['mcs_mask'] > 0) & (mask_ocean)).sel(
+    #     lon=slice(lon_bounds[0], lon_bounds[1]), 
+    #     lat=slice(lat_bounds[0], lat_bounds[1]),
+    # ).sum(dim=('lat', 'lon')) / ngrids_o
+
     # Sum total precipitation over space, then divide by total area
     totprecip = ds['precipitation'].sel(
         lon=slice(lon_bounds[0], lon_bounds[1]), 
         lat=slice(lat_bounds[0], lat_bounds[1]),
     ).sum(dim=('lat', 'lon')) / ngrids
+
     # Sum MCS precipitation over space, use cloudtracknumber > 0 as mask, then divide by total area
     mcsprecip = ds['precipitation'].where(ds['mcs_mask'] > 0).sel(
         lon=slice(lon_bounds[0], lon_bounds[1]), 
@@ -130,6 +158,7 @@ if __name__ == "__main__":
     #-------------------------------------------------------------------------
     var_dict = {
         'precipitation': (['time'], totprecip.data),
+        'precipitation_ocean': (['time'], totprecip_o.data),
         'mcs_precipitation': (['time'], mcsprecip.data),
         'mcs_precipitation_frac': (['time'], mcspcpfrac.data),
         'mcs_cloud_frac': (['time'], mcscloudfrac.data),
@@ -154,5 +183,3 @@ if __name__ == "__main__":
     encoding = {var: comp for var in dsout.data_vars}
     dsout.to_netcdf(path=out_filename_timeseries, mode='w', format='NETCDF4', unlimited_dims='time', encoding=encoding)
     print(f'Time series saved: {out_filename_timeseries}')
-
-    # import pdb; pdb.set_trace()
