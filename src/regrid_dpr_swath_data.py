@@ -1,6 +1,11 @@
 """
 This script regrids DPR swath data to the global IMERG grid of 0.1x0.1 degrees.
 
+For each granule, two output files are produced:
+- *src-grid.nc: netCDF file with granule info at native grid, but restructured so it can be read with xarray
+- *regridded.nc: netCDF file containing the granule regridded to regular global IMERG grid 
+
+
 Email: kukulies@ucar.edu
 
 """
