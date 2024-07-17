@@ -22,6 +22,7 @@ def find_closest_index(array, values):
 if __name__ == "__main__":
 
     PHASE = sys.argv[1]
+    resolution = sys.argv[2]
 
     # Specify regions
     if PHASE == 'Summer':
@@ -32,41 +33,58 @@ if __name__ == "__main__":
         lon_bounds = [-180, 180]
         lat_bounds = [-20, 15]
         year = 2020
-    
+   
     tracker = 'PyFLEXTRKR'
 
-    # Ocean vs. Land threshold (%)
-    ocean_thresh = 99
-    land_thresh = 20
+    # # Ocean vs. Land threshold (%)
+    # ocean_thresh = 99
+    # land_thresh = 20
 
-    dir_root = '/pscratch/sd/f/feng045/DYAMOND/'
-    dir_dpr = f'{dir_root}GPM_DYAMOND/DPR/'
+    dir_root = f'/pscratch/sd/f/feng045/DYAMOND/'
+    dir_dpr = f'{dir_root}GPM_DYAMOND/DPR/regrid_{resolution}/'
     dir_dpr_phase = f'{dir_dpr}{year}/'
     basename_dpr = '2A.GPM.DPR.V9-20211125.'
     out_filename = f'{dir_dpr}rainrate_hist_{PHASE}_DPR.nc'
 
-    dir_imerg = '/pscratch/sd/f/feng045/DYAMOND/OLR_Precipitation_combined/'
+    if resolution == '0.1deg':
+        imerg_flag = ''
+        # Landmask file
+        file_lm = f'{dir_root}maps/IMERG_landmask_180W-180E_60S-60N.nc'
+        # Ocean vs. Land thresholds
+        ocean_thresh = [99,100]
+        land_thresh = [0,20]
+    if resolution == '0.25deg':
+        imerg_flag = '_regrid'
+        # Landmask file
+        file_lm = f'{dir_root}maps/era5_landmask.nc'
+        # Ocean vs. Land thresholds
+        ocean_thresh = [0,0.01]
+        land_thresh = [0.95,1]
+
+    dir_imerg = f'/pscratch/sd/f/feng045/DYAMOND/OLR_Precipitation_combined{imerg_flag}/'
     file_imerg = f'{dir_imerg}olr_pcp_{PHASE}_OBS.nc'
     file_imergv7 = f'{dir_imerg}olr_pcp_{PHASE}_OBSv7.nc'
 
     # Find all DPR files
-    files_dpr = sorted(glob.glob(f'{dir_dpr_phase}{basename_dpr}*regridded.nc'))
+    files_dpr = sorted(glob.glob(f'{dir_dpr_phase}{basename_dpr}*regridded*.nc'))
     nfiles_dpr = len(files_dpr)
     print(f'Number of DPR files: {nfiles_dpr}')
 
     # MCS mask file
-    mask_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_mask/{PHASE}/{tracker}/'
+    mask_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_mask{imerg_flag}/{PHASE}/{tracker}/'
     mask_file6 = f'{mask_dir}mcs_mask_{PHASE}_OBS.nc'
     mask_file7 = f'{mask_dir}mcs_mask_{PHASE}_OBSv7.nc'
+    print(f'MCS mask files IMERGv6: {mask_file6}')
+    print(f'MCS mask files IMERGv7: {mask_file7}')
 
-    # Landmask file
-    file_lm = f'{dir_root}maps/IMERG_landmask_180W-180E_60S-60N.nc'
+    # # Landmask file
+    # file_lm = f'{dir_root}maps/IMERG_landmask_180W-180E_60S-60N.nc'
 
     # Read landmask
     ds_lm = xr.open_dataset(file_lm).sel(
         lon=slice(lon_bounds[0], lon_bounds[1]), 
         lat=slice(lat_bounds[0], lat_bounds[1]),
-    )
+    ).squeeze()
     
     # Read MCS mask data (IMERG v6)
     dsm6 = xr.open_dataset(mask_file6).sel(
@@ -97,6 +115,19 @@ if __name__ == "__main__":
         lon=slice(lon_bounds[0], lon_bounds[1]), 
         lat=slice(lat_bounds[0], lat_bounds[1]),
     )
+
+    # Find IMERG v6 & v7 time range
+    times_i6 = ds_i6['time']
+    times_i7 = ds_i7['time']
+    tmin_i6 = times_i6.min()
+    tmin_i7 = times_i7.min()
+    tmax_i6 = times_i6.max()
+    tmax_i7 = times_i7.max()
+    tmin_imerg = xr.concat([tmin_i6, tmin_i7], dim='time').max()
+    tmax_imerg = xr.concat([tmax_i6, tmax_i7], dim='time').min()
+    # Subset DPR times within IMERG time range
+    ds_dpr = ds_dpr.sel(time=slice(tmin_imerg, tmax_imerg))
+    # import pdb; pdb.set_trace()
     
     # Find the closest indices in IMERG v6 for each time in DPR
     closest_indices = xr.apply_ufunc(
@@ -111,7 +142,7 @@ if __name__ == "__main__":
     closest_times6 = ds_i6['time'].isel(time=closest_indices)
 
     # Find the closest indices in IMERG v7 for each time in DPR
-    closest_indices7 = xr.apply_ufunc(
+    closest_indices = xr.apply_ufunc(
         find_closest_index,
         ds_i7['time'].values,
         ds_dpr['time'].values,
@@ -120,7 +151,7 @@ if __name__ == "__main__":
         output_dtypes=[int]
     )
     # Extract the closest times from IMERG
-    closest_times7 = ds_i7['time'].isel(time=closest_indices7)
+    closest_times7 = ds_i7['time'].isel(time=closest_indices)
 
     # Find the closest indices in MCS mask v6 for each time in DPR
     closest_indices = xr.apply_ufunc(
@@ -132,7 +163,7 @@ if __name__ == "__main__":
         output_dtypes=[int]
     )
     # Extract the closest times from IMERG
-    closest_times6_mcs = ds_i6['time'].isel(time=closest_indices)
+    closest_times6_mcs = dsm6['time'].isel(time=closest_indices)
 
     # Find the closest indices in MCS mask v7 for each time in DPR
     closest_indices = xr.apply_ufunc(
@@ -144,7 +175,7 @@ if __name__ == "__main__":
         output_dtypes=[int]
     )
     # Extract the closest times from IMERG
-    closest_times7_mcs = ds_i7['time'].isel(time=closest_indices)
+    closest_times7_mcs = dsm7['time'].isel(time=closest_indices)
 
     # Subset MCS mask v6 times to the closest DPR times
     dsm6_sub = dsm6.sel(time=closest_times6_mcs)
@@ -176,15 +207,18 @@ if __name__ == "__main__":
     #-------------------------------------------------------------------
     # DPR
     #-------------------------------------------------------------------
+    # Make ocean vs. land masks
+    ds6_ocean = (ds6.landseamask >= min(ocean_thresh)) & (ds6.landseamask <= max(ocean_thresh))
+    ds6_land = (ds6.landseamask >= min(land_thresh)) & (ds6.landseamask <= max(land_thresh))
     # Separate DPR ocean vs. land precipitation
-    pcp_dpr_o = ds6.precipitation_dpr.where(ds6.landseamask >= ocean_thresh)
-    pcp_dpr_l = ds6.precipitation_dpr.where(ds6.landseamask <= land_thresh)
+    pcp_dpr_o = ds6.precipitation_dpr.where(ds6_ocean)
+    pcp_dpr_l = ds6.precipitation_dpr.where(ds6_land)
 
     # Separate DPR ocean vs. land MCS precipitation
     mcs_mask6 = ds6.mcs_mask > 0
     mcspcp_dpr = ds6.precipitation_dpr.where(mcs_mask6)
-    mcspcp_dpr_o = ds6.precipitation_dpr.where((ds6.landseamask >= ocean_thresh) & (mcs_mask6))
-    mcspcp_dpr_l = ds6.precipitation_dpr.where((ds6.landseamask <= land_thresh) & (mcs_mask6))
+    mcspcp_dpr_o = ds6.precipitation_dpr.where(ds6_ocean & (mcs_mask6))
+    mcspcp_dpr_l = ds6.precipitation_dpr.where(ds6_land & (mcs_mask6))
 
     #-------------------------------------------------------------------
     # IMERG v6
@@ -195,39 +229,42 @@ if __name__ == "__main__":
 
     # Separate ocean vs. land precipitation
     # Ocean
-    pcp_imerg6_o_in = ds6.precipitation.where((ds6.precipitation_dpr >= 0) & (ds6.landseamask >= ocean_thresh))
-    pcp_imerg6_o_out = ds6.precipitation.where((np.isnan(ds6.precipitation_dpr)) & (ds6.landseamask >= ocean_thresh))
+    pcp_imerg6_o_in = ds6.precipitation.where((ds6.precipitation_dpr >= 0) & ds6_ocean)
+    pcp_imerg6_o_out = ds6.precipitation.where((np.isnan(ds6.precipitation_dpr)) & ds6_ocean)
 
     # Land
-    pcp_imerg6_l_in = ds6.precipitation.where((ds6.precipitation_dpr >= 0) & (ds6.landseamask <= land_thresh))
-    pcp_imerg6_l_out = ds6.precipitation.where((np.isnan(ds6.precipitation_dpr)) & (ds6.landseamask <= land_thresh))
+    pcp_imerg6_l_in = ds6.precipitation.where((ds6.precipitation_dpr >= 0) & ds6_land)
+    pcp_imerg6_l_out = ds6.precipitation.where((np.isnan(ds6.precipitation_dpr)) & ds6_land)
 
     # Separate ocean vs. land MCS precipitation
     mcspcp_imerg6 = ds6.precipitation.where(mcs_mask6)
-    mcspcp_imerg6_o = ds6.precipitation.where((ds6.landseamask >= ocean_thresh) & (mcs_mask6))
-    mcspcp_imerg6_l = ds6.precipitation.where((ds6.landseamask <= land_thresh) & (mcs_mask6))
+    mcspcp_imerg6_o = ds6.precipitation.where(ds6_ocean & (mcs_mask6))
+    mcspcp_imerg6_l = ds6.precipitation.where(ds6_land & (mcs_mask6))
 
     #-------------------------------------------------------------------
     # IMERG v7
     #-------------------------------------------------------------------
+    # Make ocean vs. land masks
+    ds7_ocean = (ds7.landseamask >= min(ocean_thresh)) & (ds7.landseamask <= max(ocean_thresh))
+    ds7_land = (ds7.landseamask >= min(land_thresh)) & (ds7.landseamask <= max(land_thresh))
     # Separate IMERG data to within and outside of DPR swaths
     pcp_imerg7_in = ds7.precipitation.where(ds7.precipitation_dpr >= 0)
     pcp_imerg7_out = ds7.precipitation.where(np.isnan(ds7.precipitation_dpr))
 
     # Separate ocean vs. land precipitation
     # Ocean
-    pcp_imerg7_o_in = ds7.precipitation.where((ds7.precipitation_dpr >= 0) & (ds7.landseamask >= ocean_thresh))
-    pcp_imerg7_o_out = ds7.precipitation.where((np.isnan(ds7.precipitation_dpr)) & (ds7.landseamask >= ocean_thresh))
+    pcp_imerg7_o_in = ds7.precipitation.where((ds7.precipitation_dpr >= 0) & ds7_ocean)
+    pcp_imerg7_o_out = ds7.precipitation.where((np.isnan(ds7.precipitation_dpr)) & ds7_ocean)
 
     # Land
-    pcp_imerg7_l_in = ds7.precipitation.where((ds7.precipitation_dpr >= 0) & (ds7.landseamask <= land_thresh))
-    pcp_imerg7_l_out = ds7.precipitation.where((np.isnan(ds7.precipitation_dpr)) & (ds7.landseamask <= land_thresh))
+    pcp_imerg7_l_in = ds7.precipitation.where((ds7.precipitation_dpr >= 0) & ds7_land)
+    pcp_imerg7_l_out = ds7.precipitation.where((np.isnan(ds7.precipitation_dpr)) & ds7_land)
 
     # Separate ocean vs. land MCS precipitation
     mcs_mask7 = ds7.mcs_mask > 0
     # mcspcp_imerg7 = ds7.precipitation.where(mcs_mask7)
-    mcspcp_imerg7_o = ds7.precipitation.where((ds7.landseamask >= ocean_thresh) & (mcs_mask7))
-    mcspcp_imerg7_l = ds7.precipitation.where((ds7.landseamask <= land_thresh) & (mcs_mask7))
+    mcspcp_imerg7_o = ds7.precipitation.where(ds7_ocean & (mcs_mask7))
+    mcspcp_imerg7_l = ds7.precipitation.where(ds7_land & (mcs_mask7))
 
 
     ####################################################################
@@ -369,6 +406,10 @@ if __name__ == "__main__":
         'lon_bounds': lon_bounds,
         'lat_bounds': lat_bounds,
         # 'tracker': tracker,
+        'resolution': resolution,
+        'landmask_file': file_lm,
+        'ocean_thresh': ocean_thresh,
+        'land_thresh': land_thresh,
         'contact':'Zhe Feng, zhe.feng@pnnl.gov',
         'created_on':time.ctime(time.time()),
     }

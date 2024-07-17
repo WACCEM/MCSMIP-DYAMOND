@@ -31,7 +31,8 @@ if __name__ == "__main__":
     # code_func = 'make_mcs_stats_from_maskfile'
     # code_func = 'extract_mcs_2d_env'
     # code_func = 'avg_mcs_track_env_space'
-    code_func = 'calc_tb_rainrate_pdf_byregion'
+    # code_func = 'calc_tb_rainrate_pdf_byregion'
+    code_func = 'calc_tb_rainrate_pdf_byregion_regrid'
     # code_func = 'regrid_tbpcp2era5'
     # code_func = 'regrid_envs2era5'
     # code_func = 'regrid_mcsmask2era5'
@@ -83,6 +84,8 @@ if __name__ == "__main__":
         wallclock_time = '00:10:00'
     elif 'calc_tb_rainrate_pdf_byregion' in code_name:
         wallclock_time = '00:15:00'
+    elif 'calc_tb_rainrate_pdf_byregion_regrid' in code_name:
+        wallclock_time = '00:10:00'
     elif 'regrid_tbpcp2era5' in code_name:
         wallclock_time = '00:10:00'
     elif 'regrid_mcsmask2era5' in code_name:
