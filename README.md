@@ -54,6 +54,16 @@ The `${}` are command line inputs, examples:
 
 `python unify_env_files.py ${PHASE} ${runname} ${env_varname}`
 
+## Download DPR swath data 
+
+`python download_dpr.py ${outdir} ${start_date} ${end_date}`
+
+> ${outdir}: directory where to store the downloaded data 
+> 
+> ${start_date}: start date and time, e.g. 2020-02-01T00:00:00
+> 
+> ${end_date}: end date and time, e.g. 2020-02-28T23:00:00
+
 ## Visualization
 
 ---
@@ -79,6 +89,21 @@ The `${}` are command line inputs, examples:
 * **Regrid MCS mask to ERA5:**
 
 `python regrid_mcsmask2era5.py ${PHASE} ${runname} ${tracker}`
+
+## Regrid GPM DPR swath data to IMERG grid:
+
+`python regridding_dpr.py ${data_path} ${outdir} ${start_date} ${end_date} ${target_grid}`
+
+> 
+> ${data_path}: directory that contains the downloaded DPR data files
+> 
+> ${outdir}: directory where to store the regridded files  
+> 
+> ${start_date}: start date and time, e.g. 2020-02-02T00:00:00
+> 
+> ${end_date}: end date and time, e.g. 2020-02-28T23:00:00
+> 
+> ${target_grid}: directory of a file with the target grid, e.g. data/olr_pcp_Winter_OBS_2020022612.nc
 
 
 ## Calculate Statistics
