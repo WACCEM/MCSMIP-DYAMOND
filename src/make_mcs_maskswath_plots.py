@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
 
     # Tracker names
-    Trackers = ['KFyAO']
+    Trackers = ['DL']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',
