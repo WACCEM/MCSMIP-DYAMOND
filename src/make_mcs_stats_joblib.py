@@ -32,11 +32,11 @@ if __name__ == "__main__":
     # code_func = 'extract_mcs_2d_env'
     # code_func = 'avg_mcs_track_env_space'
     # code_func = 'calc_tb_rainrate_pdf_byregion'
-    code_func = 'calc_tb_rainrate_pdf_byregion_regrid'
+    # code_func = 'calc_tb_rainrate_pdf_byregion_regrid'
     # code_func = 'regrid_tbpcp2era5'
     # code_func = 'regrid_envs2era5'
     # code_func = 'regrid_mcsmask2era5'
-    # code_func = 'calc_mcs_pcp_envs_pairs'
+    code_func = 'calc_mcs_pcp_envs_pairs'
 
     # slurm_dir = code_dir
     # code_name = f'{code_dir}unify_dyamond_olr_pcp_files.py'
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     elif 'regrid_envs2era5' in code_name:
         wallclock_time = '00:10:00'
     elif 'calc_mcs_pcp_envs_pairs' in code_name:
-        wallclock_time = '02:00:00'
+        wallclock_time = '01:00:00'
 
     # DYAMOND phase start date
     if PHASE == 'Summer':

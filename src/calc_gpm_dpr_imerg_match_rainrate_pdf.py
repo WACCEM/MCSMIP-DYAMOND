@@ -23,6 +23,7 @@ if __name__ == "__main__":
 
     PHASE = sys.argv[1]
     resolution = sys.argv[2]
+    tracker = sys.argv[3]
 
     # Specify regions
     if PHASE == 'Summer':
@@ -34,7 +35,7 @@ if __name__ == "__main__":
         lat_bounds = [-20, 15]
         year = 2020
    
-    tracker = 'PyFLEXTRKR'
+    # tracker = 'PyFLEXTRKR'
 
     # # Ocean vs. Land threshold (%)
     # ocean_thresh = 99
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     dir_dpr = f'{dir_root}GPM_DYAMOND/DPR/regrid_{resolution}/'
     dir_dpr_phase = f'{dir_dpr}{year}/'
     basename_dpr = '2A.GPM.DPR.V9-20211125.'
-    out_filename = f'{dir_dpr}rainrate_hist_{PHASE}_DPR.nc'
+    out_filename = f'{dir_dpr}rainrate_hist_{PHASE}_DPR_{tracker}.nc'
 
     if resolution == '0.1deg':
         imerg_flag = ''
@@ -405,7 +406,7 @@ if __name__ == "__main__":
         'title': 'GPM DPR precipitation histogram',
         'lon_bounds': lon_bounds,
         'lat_bounds': lat_bounds,
-        # 'tracker': tracker,
+        'tracker': tracker,
         'resolution': resolution,
         'landmask_file': file_lm,
         'ocean_thresh': ocean_thresh,

@@ -73,9 +73,9 @@ python make_mcs_stats_from_maskfile.py ${config_file} ${tracker}
 # Environments
 # python unify_env_files.py ${PHASE} ${runname} ${env_varname}
 # python avg_global_env_map_timeseries.py ${PHASE} ${runname} ${env_varname} ${start_date} ${end_date}
-# python extract_mcs_2d_env.py ${PHASE} ${runname} ${tracker} ${env_varname}
-# python avg_mcs_track_env_space.py ${PHASE} ${runname} ${tracker} ${env_varname}
+python extract_mcs_2d_env.py ${PHASE} ${runname} ${tracker} ${env_varname}
+python avg_mcs_track_env_space.py ${PHASE} ${runname} ${tracker} ${env_varname}
 # python regrid_envs2era5.py ${PHASE} ${runname} ${env_varname}
 # python regrid_tbpcp2era5.py ${PHASE} ${runname}
-# python regrid_mcsmask2era5.py ${PHASE} ${runname} ${tracker}
-# python calc_mcs_pcp_envs_pairs.py ${PHASE} ${runname} ${tracker} ${env_varname} ${start_date} ${end_date}
+python regrid_mcsmask2era5.py ${PHASE} ${runname} ${tracker}
+python calc_mcs_pcp_envs_pairs.py ${PHASE} ${runname} ${tracker} ${env_varname} ${start_date} ${end_date}

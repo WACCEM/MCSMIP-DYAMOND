@@ -77,6 +77,9 @@ if __name__ == "__main__":
         lon_bounds = [-180, 180]
         lat_bounds = [-20, 15]
 
+    # Min precipitation threshold (mm/h)
+    pcp_thresh = 0.5
+
     # Read landmask file
     ds_lm = xr.open_dataset(lm_file).sel(lat=slice(min(lat_bounds), max(lat_bounds))).squeeze()
     ds_lm = ds_lm.drop_vars(['utc_date'])
@@ -128,6 +131,7 @@ if __name__ == "__main__":
     # Combine the DataSets into a new DataSet
     ds = xr.merge([ds_lm, ds_p_common, ds_m_common, ds_e_common], combine_attrs='drop_conflicts')
     print(f'Finished combining DataSets.')
+    pcp = ds['precipitation']
     # Subset specified time period
     # ds = ds.sel(time=slice(datetime_range[0], datetime_range[1]))
 
@@ -140,47 +144,48 @@ if __name__ == "__main__":
     print(f'Masking land vs. ocean precipitation ...')
     # Ocean
     oceanfrac_thresh = 0.0
-    totpcp_o = ds['precipitation'].where((ds['landseamask'] == oceanfrac_thresh))
-    mcspcp_o = ds['precipitation'].where((ds['mcs_mask'] > 0) & (ds['landseamask'] == oceanfrac_thresh))
+    # totpcp_o = pcp.where((ds['landseamask'] == oceanfrac_thresh))
+    # mcspcp_o = pcp.where((ds['mcs_mask'] > 0) & (ds['landseamask'] == oceanfrac_thresh))
+    mcspcp_o = pcp.where((ds['mcs_mask'] > 0) & (pcp > pcp_thresh) & (ds['landseamask'] == oceanfrac_thresh))
 
     # Land
-    landfrac_thresh = 0.9
-    totpcp_l = ds['precipitation'].where((ds['landseamask'] > landfrac_thresh))
-    mcspcp_l = ds['precipitation'].where((ds['mcs_mask'] > 0) & (ds['landseamask'] > landfrac_thresh))
+    landfrac_thresh = 0.95
+    # totpcp_l = pcp.where((ds['landseamask'] > landfrac_thresh))
+    mcspcp_l = pcp.where((ds['mcs_mask'] > 0) & (pcp > pcp_thresh) & (ds['landseamask'] >= landfrac_thresh))
 
     # Group precipitation by environment and compute mean
     print(f'Running groupby operations ...')
-    totpcp_groupby_o = totpcp_o.groupby_bins(intqv, bins=bins_intqv)
-    totpcp_groupby_l = totpcp_l.groupby_bins(intqv, bins=bins_intqv)
+    # totpcp_groupby_o = totpcp_o.groupby_bins(intqv, bins=bins_intqv)
+    # totpcp_groupby_l = totpcp_l.groupby_bins(intqv, bins=bins_intqv)
 
     mcspcp_groupby_o = mcspcp_o.groupby_bins(intqv, bins=bins_intqv)
     mcspcp_groupby_l = mcspcp_l.groupby_bins(intqv, bins=bins_intqv)
 
     # Mean values
-    totpcp_intqv_o = totpcp_groupby_o.mean(keep_attrs=True)
-    totpcp_intqv_l = totpcp_groupby_l.mean(keep_attrs=True)
+    # totpcp_intqv_o = totpcp_groupby_o.mean(keep_attrs=True)
+    # totpcp_intqv_l = totpcp_groupby_l.mean(keep_attrs=True)
 
     mcspcp_intqv_o = mcspcp_groupby_o.mean(keep_attrs=True)
     mcspcp_intqv_l = mcspcp_groupby_l.mean(keep_attrs=True)
 
     # Number of samples
-    totpcp_ns_o = totpcp_groupby_o.count()
+    # totpcp_ns_o = totpcp_groupby_o.count()
     mcspcp_ns_o = mcspcp_groupby_o.count()
 
-    totpcp_ns_l = totpcp_groupby_l.count()
-    mcspcp_ns_l = totpcp_groupby_l.count()
+    # totpcp_ns_l = totpcp_groupby_l.count()
+    mcspcp_ns_l = mcspcp_groupby_l.count()
 
     # Define xarray output dataset
     print('Writing output to netCDF file ...')
     var_dict = {
-        'total_land': (['bins'], totpcp_intqv_l.data, totpcp_intqv_l.attrs),
+        # 'total_land': (['bins'], totpcp_intqv_l.data, totpcp_intqv_l.attrs),
         'mcs_land': (['bins'], mcspcp_intqv_l.data, mcspcp_intqv_l.attrs),
-        'total_ocean': (['bins'], totpcp_intqv_o.data, totpcp_intqv_o.attrs),
+        # 'total_ocean': (['bins'], totpcp_intqv_o.data, totpcp_intqv_o.attrs),
         'mcs_ocean': (['bins'], mcspcp_intqv_o.data, mcspcp_intqv_o.attrs),
 
-        'total_land_ns': (['bins'], totpcp_ns_l.data),
+        # 'total_land_ns': (['bins'], totpcp_ns_l.data),
         'mcs_land_ns': (['bins'], mcspcp_ns_l.data),
-        'total_ocean_ns': (['bins'], totpcp_ns_o.data),
+        # 'total_ocean_ns': (['bins'], totpcp_ns_o.data),
         'mcs_ocean_ns': (['bins'], mcspcp_ns_o.data),
     }
     coord_dict = {'bins': (['bins'], bins_intqv_c)}
@@ -190,13 +195,12 @@ if __name__ == "__main__":
         'lat_bounds': lat_bounds,
         'landfrac_thresh': landfrac_thresh,
         'oceanfrac_thresh': oceanfrac_thresh,
+        'pcp_thresh': pcp_thresh,
         'contact':'Zhe Feng, zhe.feng@pnnl.gov',
         'created_on':time.ctime(time.time()),
     }
     dsout = xr.Dataset(var_dict, coords=coord_dict, attrs=gattr_dict)
     # Define variable attributes
-    # dsout.bins.attrs['long_name'] = f"{intqv.attrs['long_name']} bins"
-    # dsout.bins.attrs['units'] = intqv.attrs['units']
     dsout.bins.attrs['long_name'] = f"Total column water vapor bins"
     dsout.bins.attrs['units'] = f"kg m**-2"
 
@@ -215,28 +219,19 @@ if __name__ == "__main__":
         # Compute interquartile range
         mcspcp25_intqv_o = mcspcp_groupby_o.quantile(0.25, keep_attrs=True)
         mcspcp75_intqv_o = mcspcp_groupby_o.quantile(0.75, keep_attrs=True)
+        mcspcp90_intqv_o = mcspcp_groupby_o.quantile(0.90, keep_attrs=True)
         mcspcp25_intqv_l = mcspcp_groupby_l.quantile(0.25, keep_attrs=True)
         mcspcp75_intqv_l = mcspcp_groupby_l.quantile(0.75, keep_attrs=True)
-
-        # # Standard deviation
-        # totpcp_intqv_std_o = totpcp_groupby_o.std()
-        # mcspcp_intqv_std_o = mcspcp_groupby_o.std()
-
-        # totpcp_intqv_std_l = totpcp_groupby_l.std()
-        # mcspcp_intqv_std_l = totpcp_groupby_l.std()
+        mcspcp90_intqv_l = mcspcp_groupby_l.quantile(0.90, keep_attrs=True)
 
         print('Writing interquartile output to netCDF file ...')
         var_dict = {
-            # Interquartile range values
             'mcs_ocean_25': (['bins'], mcspcp25_intqv_o.data, mcspcp25_intqv_o.attrs),
             'mcs_ocean_75': (['bins'], mcspcp75_intqv_o.data, mcspcp75_intqv_o.attrs),
+            'mcs_ocean_90': (['bins'], mcspcp90_intqv_o.data, mcspcp90_intqv_o.attrs),
             'mcs_land_25': (['bins'], mcspcp25_intqv_l.data, mcspcp25_intqv_l.attrs),
             'mcs_land_75': (['bins'], mcspcp75_intqv_l.data, mcspcp75_intqv_l.attrs),
-
-            # 'total_land_std': (['bins'], totpcp_intqv_std_l.data),
-            # 'mcs_land_std': (['bins'], mcspcp_intqv_std_l.data),
-            # 'total_ocean_std': (['bins'], totpcp_intqv_std_o.data),
-            # 'mcs_ocean_std': (['bins'], mcspcp_intqv_std_o.data),
+            'mcs_land_90': (['bins'], mcspcp90_intqv_l.data, mcspcp90_intqv_l.attrs),
         }
         coord_dict = {'bins': (['bins'], bins_intqv_c)}
         gattr_dict = {
@@ -245,6 +240,7 @@ if __name__ == "__main__":
             'lat_bounds': lat_bounds,
             'landfrac_thresh': landfrac_thresh,
             'oceanfrac_thresh': oceanfrac_thresh,
+            'pcp_thresh': pcp_thresh,
             'contact':'Zhe Feng, zhe.feng@pnnl.gov',
             'created_on':time.ctime(time.time()),
         }
