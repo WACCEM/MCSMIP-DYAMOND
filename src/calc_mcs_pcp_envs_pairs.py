@@ -78,7 +78,7 @@ if __name__ == "__main__":
         lat_bounds = [-20, 15]
 
     # Min precipitation threshold (mm/h)
-    pcp_thresh = 0.5
+    pcp_thresh = 0.1
 
     # Read landmask file
     ds_lm = xr.open_dataset(lm_file).sel(lat=slice(min(lat_bounds), max(lat_bounds))).squeeze()
