@@ -23,6 +23,11 @@ Optionally, this Bash script can run all jobs for a single DYAMOND source and a 
 Below are more details for different sets of processing codes.
 
 
+## Regrid DYAMOND Data
+---
+CDO scripts used to regrid raw DYAMOND data to lat/lon grids are in the [regrid directory](https://github.com/WACCEM/MCSMIP-DYAMOND/tree/main/regrid).
+
+
 ## Standardize Datasets
 ---
 
