@@ -167,13 +167,16 @@ if __name__ == "__main__":
     varname = sys.argv[3]
 
     # Regrid method
-    regrid_method = 'bilinear'
+    # regrid_method = 'bilinear'
+    regrid_method = 'conservative'
 
     # Input file name
-    in_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs/'
+    # in_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs/'
+    in_dir = f'/pscratch/sd/f/feng045/DYAMOND/Environments/'
     in_filename = f'{in_dir}{PHASE}_{runname}_{varname}.nc'
     # Output file name
-    out_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs_regrid/'
+    # out_dir = f'/pscratch/sd/f/feng045/DYAMOND/{PHASE}/{runname}/envs_regrid/'
+    out_dir = '/pscratch/sd/f/feng045/DYAMOND/Environments_0.25deg/'
     os.makedirs(out_dir, exist_ok=True)
     # Make output filename
     in_fn = os.path.basename(in_filename)
