@@ -4,10 +4,10 @@ Unify the MCS mask files from different trackers:
 - Replace the lat, lon coordinate values with a reference grid file
 """
 import numpy as np
-import glob, sys, os
+import sys, os
 import time
 import xarray as xr
-import pandas as pd
+# import pandas as pd
 
 if __name__ == "__main__":
     
@@ -18,13 +18,15 @@ if __name__ == "__main__":
     in_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_mask/{PHASE}/{tracker}/orig/'
     out_dir = f'/pscratch/sd/f/feng045/DYAMOND/mcs_mask/{PHASE}/{tracker}/'
     out_filename = f'{out_dir}mcs_mask_{PHASE}_{runname}.nc'
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Reference grid
+    ref_grid = '/pscratch/sd/f/feng045/DYAMOND/maps/IMERG_landmask_180W-180E_60S-60N.nc'
     
     if PHASE == 'Summer':
         start_datetime = '2016-08-01 00:00:00'
-        # period = '20160801.0000_20160910.0000'
     elif PHASE == 'Winter':
         start_datetime = '2020-01-20 00:00:00'
-        # period = '20200120.0000_20200301.0000'
 
     # Mask filename
     if tracker == 'PyFLEXTRKR':
@@ -64,13 +66,15 @@ if __name__ == "__main__":
         mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}_ATRACKCSv2.nc'
         xcoord_name = 'lon'
         ycoord_name = 'lat'
+    elif tracker == 'TIMPS':
+        mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}.nc'
+        xcoord_name = 'lon'
+        ycoord_name = 'lat'
     else:
         print(f'ERROR: {tracker} file format is undefined.')
         print(f'Code will exist now.')
         sys.exit()
-    
-    # Reference grid
-    ref_grid = '/pscratch/sd/f/feng045/DYAMOND/maps/IMERG_landmask_180W-180E_60S-60N.nc'
+
 
     # Read lon from reference grid
     dsref = xr.open_dataset(ref_grid)
@@ -127,15 +131,12 @@ if __name__ == "__main__":
     ds.update({'longitude': lon2d_ref})
     ds.update({'latitude': lat2d_ref})
 
-    # Drop original coordinates
-    # if (tracker != 'TOOCAN'):
-    #     dsout = ds.drop_vars([xcoord_name, ycoord_name])
-    # else:
-    #     dsout = ds
+    # Make output DataSet
     if (tracker == 'TOOCAN') | (tracker == 'tobac') | (tracker == 'TAMS') | (tracker == 'simpleTrack') | \
-        (tracker == 'KFyAO') | (tracker == 'DL') | (tracker == 'ATRACKCS'):
+        (tracker == 'KFyAO') | (tracker == 'DL') | (tracker == 'ATRACKCS') | (tracker == 'TIMPS'):
         dsout = ds
     else:
+        # Drop original coordinates
         dsout = ds.drop_vars([xcoord_name, ycoord_name])
     # import pdb; pdb.set_trace()
 
@@ -180,13 +181,6 @@ if __name__ == "__main__":
         'Created_on': time.ctime(time.time()),
     }
     dsout.attrs = gattrs
-    # Add global attributes
-    # dsout.attrs['Title'] = f'{PHASE} {runname} MCS mask file'
-    # dsout.attrs['tracker'] = f'{tracker}'
-    # dsout.attrs['Created_on'] = time.ctime(time.time())
-    # Delete attributes
-    # dsout.attrs.pop('history')
-    # import pdb; pdb.set_trace()
 
     # Set encoding/compression for all variables
     comp = dict(zlib=True)
