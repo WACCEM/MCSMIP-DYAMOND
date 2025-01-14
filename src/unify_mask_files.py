@@ -63,7 +63,7 @@ if __name__ == "__main__":
         xcoord_name = 'lon'
         ycoord_name = 'lat'
     elif tracker == 'ATRACKCS':
-        mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}_ATRACKCSv2.nc'
+        mask_file = f'{in_dir}mcs_mask_{PHASE}_{runname}_ATRACKCS.nc'
         xcoord_name = 'lon'
         ycoord_name = 'lat'
     elif tracker == 'TIMPS':

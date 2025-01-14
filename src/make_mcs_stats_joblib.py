@@ -15,7 +15,7 @@ if __name__ == "__main__":
     tracker = sys.argv[2]
     
     # Submit slurm job
-    submit_job = True
+    submit_job = False
 
     # Environmental variable name
     env_varname = 'intqv'
@@ -30,13 +30,13 @@ if __name__ == "__main__":
     # code_func = 'calc_tbpf_mcs_rainmap_mcsmip'
     # code_func = 'make_mcs_stats_from_maskfile'
     # code_func = 'extract_mcs_2d_env'
-    code_func = 'avg_mcs_track_env_space'
+    # code_func = 'avg_mcs_track_env_space'
     # code_func = 'calc_tb_rainrate_pdf_byregion'
     # code_func = 'calc_tb_rainrate_pdf_byregion_regrid'
     # code_func = 'regrid_tbpcp2era5'
     # code_func = 'regrid_envs2era5'
     # code_func = 'regrid_mcsmask2era5'
-    # code_func = 'calc_mcs_pcp_envs_pairs'
+    code_func = 'calc_mcs_pcp_envs_pairs'
 
     # slurm_dir = code_dir
     # code_name = f'{code_dir}unify_dyamond_olr_pcp_files.py'
@@ -48,12 +48,12 @@ if __name__ == "__main__":
     # code_name = f'{code_dir}calc_tbpf_mcs_rainmap_mcsmip.py'
     # code_name = f'{code_dir}make_mcs_stats_from_maskfile.py'
     # code_name = f'{code_dir}extract_mcs_2d_env.py'
-    code_name = f'{code_dir}avg_mcs_track_env_space.py'
+    # code_name = f'{code_dir}avg_mcs_track_env_space.py'
     # code_name = f'{code_dir}calc_tb_rainrate_pdf_byregion.py'
     # code_name = f'{code_dir}regrid_tbpcp2era5.py'
     # code_name = f'{code_dir}regrid_envs2era5.py'
     # code_name = f'{code_dir}regrid_mcsmask2era5.py'
-    # code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
+    code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
     # config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
     
     code_name = f'{code_dir}{code_func}.py'
