@@ -15,7 +15,7 @@ if __name__ == "__main__":
     tracker = sys.argv[2]
     
     # Submit slurm job
-    submit_job = True
+    submit_job = False
 
     # Environmental variable name
     env_varname = 'intqv'
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     # code_name = f'{code_dir}regrid_tbpcp2era5.py'
     # code_name = f'{code_dir}regrid_envs2era5.py'
     # code_name = f'{code_dir}regrid_mcsmask2era5.py'
-    # code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
+    code_name = f'{code_dir}calc_mcs_pcp_envs_pairs.py'
     # config_dir = '/global/homes/f/feng045/program/pyflex_config/config/'
     
     code_name = f'{code_dir}{code_func}.py'

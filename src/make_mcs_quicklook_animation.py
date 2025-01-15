@@ -34,11 +34,11 @@ if __name__ == "__main__":
     # DYAMOND phase start date
     if PHASE == 'Summer':
         # Domain extent (lonmin, lonmax, latmin, latmax)
-        # region = 'WPAC'
-        # extent = [125.0, 165.0, 10.0, 30.0]
+        region = 'WPAC'
+        extent = [125.0, 165.0, 10.0, 30.0]
 
-        region = 'AFC'
-        extent = [-5.0, 35.0, 0.0, 20.0]
+        # region = 'AFC'
+        # extent = [-5.0, 35.0, 0.0, 20.0]
 
         start_date = '2016-08-10T00'
         end_date = '2016-08-15T00'
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         end_date = '2020-02-06T00'
 
     # Tracker names
-    Trackers = ['DL']
+    Trackers = ['ATRACKCS']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',
@@ -65,6 +65,8 @@ if __name__ == "__main__":
     #     'simpleTrack',
     #     'DL',
     #     'KFyAO',
+    #     'TIMPS',
+    #     'ATRACKCS',
     # ]        
 
     # Model names
@@ -76,8 +78,8 @@ if __name__ == "__main__":
             'IFS',
             'MPAS',
             'NICAM',
-            'OBS',
-            'OBSv7',
+            # 'OBS',
+            # 'OBSv7',
             'SAM',
             'UM',
             'SCREAMv1',

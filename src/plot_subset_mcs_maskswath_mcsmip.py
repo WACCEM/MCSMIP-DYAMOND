@@ -280,9 +280,9 @@ def plot_colorbar(plot_data, plot_info, figname=None):
     fontsize = plot_info['fontsize']
     cmap_count = plot_info['cmaps']['cmap_count']
 
-    mpl.rcParams['font.size'] = fontsize*2
+    mpl.rcParams['font.size'] = fontsize*3
     mpl.rcParams['font.family'] = 'Helvetica'
-    fig, ax = plt.subplots(figsize=(14, 1), layout='constrained', dpi=dpi)
+    fig, ax = plt.subplots(figsize=(14, 1.3), layout='constrained', dpi=dpi)
     # Normalize colors
     cmap = plt.get_cmap(cmap_count)
     levels = np.arange(0, ntime, 1)

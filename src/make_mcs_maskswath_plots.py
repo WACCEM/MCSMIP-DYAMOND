@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
 
     # Tracker names
-    Trackers = ['DL']
+    Trackers = ['ATRACKCS']
     # Trackers = [
     #     'PyFLEXTRKR',
     #     'MOAAP',
@@ -57,22 +57,24 @@ if __name__ == "__main__":
     #     'simpleTrack',
     #     'DL',
     #     'KFyAO',
+    #     'TIMPS',
+    #     'ATRACKCS',
     # ]
 
     # Model names
     if (PHASE == 'Summer'):
         # runnames = ['OBS']
         runnames = [
-            'ARPEGE',
-            'FV3',
-            'IFS',
-            'MPAS',
-            'NICAM',
+            # 'ARPEGE',
+            # 'FV3',
+            # 'IFS',
+            # 'MPAS',
+            # 'NICAM',
             'OBS',
-            'OBSv7',
-            'SAM',
-            'UM',
-            'SCREAMv1',
+            # 'OBSv7',
+            # 'SAM',
+            # 'UM',
+            # 'SCREAMv1',
         ]
     elif (PHASE == 'Winter'):
         # runnames = ['OBSv7', 'SCREAMv1']

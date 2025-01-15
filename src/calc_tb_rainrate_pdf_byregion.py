@@ -81,6 +81,7 @@ if __name__ == "__main__":
 
     # Read mask data
     dsm = xr.open_dataset(mask_file)
+    ntimes_m = dsm.sizes['time']
     # Replace lat/lon
     dsm['lon'] = lon_r
     dsm['lat'] = lat_r
@@ -88,15 +89,19 @@ if __name__ == "__main__":
 
     # Check time encoding from the precipitation file
     time_encoding = dsr['time'].encoding.get('calendar', None)
+    time_encoding_m = dsm['time'].encoding.get('calendar', None)
     # Convert 'noleap'/'365_day' calendar time to datetime to DatetimeIndex (e.g., SCREAM)
-    # if time_encoding == 'noleap':
-    if time_encoding == '365_day':
+    if (time_encoding == '365_day') | (time_encoding == 'noleap'):
         time_DatetimeIndex = xr.cftime_range(start=dsr['time'].values[0], periods=ntimes, freq='1H', calendar='noleap').to_datetimeindex()
         # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
+        time_pcp = xr.DataArray(time_DatetimeIndex, coords={'time': time_DatetimeIndex}, dims='time')
+        dsr['time'] = time_pcp
+
+    if (time_encoding == '365_day') | (time_encoding == 'noleap'):
+        time_DatetimeIndex = xr.cftime_range(start=dsm['time'].values[0], periods=ntimes_m, freq='1H', calendar='noleap').to_datetimeindex()
+        # Convert DatetimeIndex to DataArray, then replace the time coordinate in the DataSet
         time_mcs_mask = xr.DataArray(time_DatetimeIndex, coords={'time': time_DatetimeIndex}, dims='time')
-        dsr['time'] = time_mcs_mask
-    else:
-        time_mcs_mask = dsr['time']
+        dsm['time'] = time_mcs_mask
 
     # Combine DataSets, subset region
     ds = xr.merge([dsr, dsm], compat='no_conflicts').sel(
