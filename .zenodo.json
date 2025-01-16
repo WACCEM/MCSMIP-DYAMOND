@@ -1,0 +1,30 @@
+{
+    "creators": [
+        {
+            "orcid": "0000-0002-7540-9017",
+            "affiliation": "Pacific Northwest National Laboratory",
+            "name": "Feng, Zhe"
+        },
+        {
+            "orcid": "0000-0001-6084-0069",
+            "affiliation": "National Center for Atmospheric Research",
+            "name": "Kukulies, Julia"
+        }
+    ],
+
+    "license": "Modified BSD License",
+
+    "title": "MCSMIP DYAMOND Analysis",
+
+    "related_identifiers": [
+        {
+            "scheme": "doi",
+            "identifier": "TBD",
+            "relation": "isDocumentedBy",
+            "resource_type": "publication-article"
+        }
+    ],
+
+    "keywords": ["MCSMIP", "DYAMOND", "MCS", "Convection", "Precipitation"]
+
+}
